@@ -102,11 +102,18 @@ class KashierWebhookController extends Controller
         $order->forceFill([
             'status' => 'confirmed',
             'order_number' => $order->order_number ?: $this->generateOrderNumber($order),
+            'pickup_otp' => $order->pickup_otp ?: $this->generateOtp(),
+            'delivery_otp' => $order->delivery_otp ?: $this->generateOtp(),
             'kashier_order_id' => (string) ($payment['kashier_order_id'] ?? ''),
             'kashier_transaction_id' => (string) ($payment['transaction_id'] ?? ''),
             'payment_method' => (string) ($payment['method'] ?? $order->payment_method),
             'paid_at' => now(),
         ])->save();
+    }
+
+    private function generateOtp(): string
+    {
+        return str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
     }
 
     private function resolveOrder(string $merchantOrderId): ?Order

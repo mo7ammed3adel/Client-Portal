@@ -16,13 +16,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Administrator account for the back office.
-        User::query()->updateOrCreate(
-            ['email' => 'admin@talba.eg'],
+        // Administrator account (firstOrCreate so redeploys don't reset the password).
+        User::query()->firstOrCreate(
+            ['email' => 'melsaprot2001@gmail.com'],
             [
                 'name' => 'مدير طلبة',
-                'password' => Hash::make('password'),
+                'phone' => '01068851272',
+                'password' => Hash::make('Talba@2026'),
                 'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // Demo courier account for the captain PWA.
+        $courier = User::query()->firstOrCreate(
+            ['email' => 'captain@talba.eg'],
+            [
+                'name' => 'كابتن تجريبي',
+                'phone' => '01000000000',
+                'password' => Hash::make('password'),
+                'role' => 'courier',
                 'email_verified_at' => now(),
             ]
         );
@@ -33,7 +46,7 @@ class DatabaseSeeder extends Seeder
             Setting::query()->firstOrCreate(['key' => $key], ['value' => $value]);
         }
 
-        // Sample paid orders so the admin dashboard is not empty on a fresh install.
+        // Sample paid orders so the dashboards are not empty on a fresh install.
         if (Order::query()->doesntExist()) {
             $samples = [
                 [
@@ -56,10 +69,13 @@ class DatabaseSeeder extends Seeder
                     'notes' => 'مستندات هامة، يرجى التعامل بحرص.',
                     'payment_method' => 'card',
                     'paid_at' => now()->subDays(2),
+                    'pickup_otp' => '1234',
+                    'delivery_otp' => '5678',
                 ],
                 [
                     'order_number' => 'TLB-260617-00002',
                     'status' => 'out_for_delivery',
+                    'courier_id' => $courier->id,
                     'sender_name' => 'منى حسن',
                     'sender_phone' => '+201228889990',
                     'receiver_name' => 'خالد إبراهيم',
@@ -77,11 +93,14 @@ class DatabaseSeeder extends Seeder
                     'notes' => 'كرتونة ملابس.',
                     'payment_method' => 'wallet',
                     'paid_at' => now()->subDay(),
+                    'pickup_otp' => '4321',
+                    'delivery_otp' => '8765',
+                    'picked_up_at' => now()->subHours(3),
                 ],
             ];
 
             foreach ($samples as $i => $sample) {
-                $order = Order::create($sample + ['kashier_merchant_order_id' => null]);
+                $order = Order::create($sample);
                 $order->forceFill([
                     'kashier_merchant_order_id' => 'order-'.$order->id.'-seed-'.($i + 1),
                 ])->save();

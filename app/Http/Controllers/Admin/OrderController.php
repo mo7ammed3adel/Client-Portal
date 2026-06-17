@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -39,7 +40,9 @@ class OrderController extends Controller
     {
         abort_if($order->status === 'pending_payment', 404);
 
-        return view('admin.orders.show', compact('order'));
+        $couriers = User::query()->where('role', 'courier')->orderBy('name')->get();
+
+        return view('admin.orders.show', compact('order', 'couriers'));
     }
 
     public function update(Request $request, Order $order): RedirectResponse
@@ -53,5 +56,18 @@ class OrderController extends Controller
         $order->update($validated);
 
         return back()->with('status', 'تم تحديث حالة الطلب.');
+    }
+
+    public function assignCourier(Request $request, Order $order): RedirectResponse
+    {
+        abort_if($order->status === 'pending_payment', 404);
+
+        $validated = $request->validate([
+            'courier_id' => ['nullable', Rule::exists('users', 'id')->where('role', 'courier')],
+        ]);
+
+        $order->update(['courier_id' => $validated['courier_id'] ?: null]);
+
+        return back()->with('status', 'تم تحديث المندوب المسؤول عن الطلب.');
     }
 }

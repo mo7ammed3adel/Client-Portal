@@ -83,6 +83,41 @@
                     </div>
                 </div>
 
+                {{-- Courier assignment --}}
+                <div class="portal-card">
+                    <div class="portal-card-body space-y-3">
+                        <h2 class="font-bold text-slate-950 dark:text-white">المندوب</h2>
+                        <form method="POST" action="{{ route('admin.orders.assign', $order) }}" class="space-y-3">
+                            @csrf
+                            @method('PATCH')
+                            <select name="courier_id" class="portal-input">
+                                <option value="">— غير معيّن —</option>
+                                @foreach ($couriers as $courier)
+                                    <option value="{{ $courier->id }}" @selected($order->courier_id === $courier->id)>{{ $courier->name }}</option>
+                                @endforeach
+                            </select>
+                            <button class="portal-button-secondary w-full">تعيين المندوب</button>
+                        </form>
+                        @if ($couriers->isEmpty())
+                            <p class="text-xs text-slate-500">لا يوجد مناديب بعد. <a href="{{ route('admin.couriers.index') }}" class="font-semibold text-brand-600">أضف مندوبًا</a>.</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Verification codes + milestones --}}
+                @if ($order->pickup_otp || $order->picked_up_at)
+                    <div class="portal-card">
+                        <div class="portal-card-body space-y-2.5 text-sm">
+                            <h2 class="font-bold text-slate-950 dark:text-white">أكواد التحقق والمراحل</h2>
+                            <div class="flex justify-between"><span class="text-slate-500">كود الاستلام</span><span class="font-mono font-bold" dir="ltr">{{ $order->pickup_otp }}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">كود التسليم</span><span class="font-mono font-bold" dir="ltr">{{ $order->delivery_otp }}</span></div>
+                            <div class="my-1 border-t border-slate-100 dark:border-slate-800"></div>
+                            <div class="flex justify-between"><span class="text-slate-500">تم الاستلام</span><span class="font-semibold">{{ $order->picked_up_at?->format('Y/m/d H:i') ?? '—' }}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-500">تم التسليم</span><span class="font-semibold">{{ $order->delivered_at?->format('Y/m/d H:i') ?? '—' }}</span></div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="portal-card">
                     <div class="portal-card-body space-y-2.5 text-sm">
                         <h2 class="font-bold text-slate-950 dark:text-white">التسعير والدفع</h2>

@@ -1,0 +1,21 @@
+{
+    "name": "طلبة كابتن",
+    "short_name": "طلبة كابتن",
+    "description": "تطبيق مندوبي الشحن لمنصة طلبة — استلام وتسليم الشحنات بكود تحقق.",
+    "lang": "ar",
+    "dir": "rtl",
+    "start_url": "/courier",
+    "scope": "/courier",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0b1f3a",
+    "theme_color": "#0b1f3a",
+    "icons": [
+        {
+            "src": "/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

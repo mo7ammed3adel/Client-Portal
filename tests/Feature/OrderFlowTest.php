@@ -88,6 +88,9 @@ class OrderFlowTest extends TestCase
         $this->assertNotNull($order->paid_at);
         $this->assertNotNull($order->order_number);
         $this->assertStringStartsWith('TLB-', $order->order_number);
+        // Pickup/delivery verification codes are generated on confirmation.
+        $this->assertNotNull($order->pickup_otp);
+        $this->assertNotNull($order->delivery_otp);
     }
 
     public function test_webhook_rejects_amount_mismatch(): void

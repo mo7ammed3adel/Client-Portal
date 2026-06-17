@@ -56,7 +56,10 @@
 
         <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row">
             <p>© {{ date('Y') }} طلبة. جميع الحقوق محفوظة.</p>
-            <p class="text-xs">مدفوعات آمنة عبر Kashier</p>
+            <div class="flex items-center gap-4 text-xs">
+                <a href="{{ route('login') }}" class="hover:text-brand-400">دخول الفريق / المناديب</a>
+                <span>مدفوعات آمنة عبر Kashier</span>
+            </div>
         </div>
     </div>
 </footer>

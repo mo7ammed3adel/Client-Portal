@@ -15,6 +15,9 @@
                         <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
                             الطلبات
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.couriers.index')" :active="request()->routeIs('admin.couriers.*')">
+                            المناديب
+                        </x-nav-link>
                         <x-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.*')">
                             رسائل التواصل
                         </x-nav-link>
@@ -68,6 +71,7 @@
             <div class="space-y-1 px-4 py-3">
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">لوحة التحكم</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">الطلبات</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.couriers.index')" :active="request()->routeIs('admin.couriers.*')">المناديب</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.*')">رسائل التواصل</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">الإعدادات</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('home')">عرض الموقع</x-responsive-nav-link>

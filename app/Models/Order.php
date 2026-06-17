@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
     protected $fillable = [
         'order_number',
         'status',
+        'courier_id',
         'sender_name',
         'sender_phone',
         'receiver_name',
@@ -24,11 +26,15 @@ class Order extends Model
         'base_fee',
         'total_cost',
         'notes',
+        'pickup_otp',
+        'delivery_otp',
         'kashier_merchant_order_id',
         'kashier_order_id',
         'kashier_transaction_id',
         'payment_method',
         'paid_at',
+        'picked_up_at',
+        'delivered_at',
     ];
 
     protected function casts(): array
@@ -43,9 +49,16 @@ class Order extends Model
             'base_fee' => 'decimal:2',
             'total_cost' => 'decimal:2',
             'paid_at' => 'datetime',
+            'picked_up_at' => 'datetime',
+            'delivered_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
+    }
+
+    public function courier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'courier_id');
     }
 
     /**
@@ -73,6 +86,22 @@ class Order extends Model
     public function isPaid(): bool
     {
         return $this->status !== 'pending_payment' && $this->paid_at !== null;
+    }
+
+    /**
+     * Whether a courier may still collect this shipment from the sender.
+     */
+    public function awaitingPickup(): bool
+    {
+        return in_array($this->status, ['confirmed', 'processing'], true);
+    }
+
+    /**
+     * Whether this shipment has been collected and is on its way.
+     */
+    public function awaitingDelivery(): bool
+    {
+        return $this->status === 'out_for_delivery';
     }
 
     /**

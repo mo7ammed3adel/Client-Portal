@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\ContactRequestController as AdminContactController;
+use App\Http\Controllers\Admin\CourierController as AdminCourierController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Courier\CourierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -62,6 +64,11 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
         Route::patch('orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
+        Route::patch('orders/{order}/courier', [AdminOrderController::class, 'assignCourier'])->name('orders.assign');
+
+        Route::get('couriers', [AdminCourierController::class, 'index'])->name('couriers.index');
+        Route::post('couriers', [AdminCourierController::class, 'store'])->name('couriers.store');
+        Route::delete('couriers/{courier}', [AdminCourierController::class, 'destroy'])->name('couriers.destroy');
 
         Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
         Route::get('contacts/{contact}', [AdminContactController::class, 'show'])->name('contacts.show');
@@ -70,6 +77,21 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
         Route::patch('settings', [AdminSettingController::class, 'update'])->name('settings.update');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Courier app (PWA)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:courier'])
+    ->prefix('courier')
+    ->name('courier.')
+    ->group(function (): void {
+        Route::get('/', [CourierController::class, 'dashboard'])->name('dashboard');
+        Route::get('orders/{order}', [CourierController::class, 'show'])->name('orders.show');
+        Route::post('orders/{order}/pickup', [CourierController::class, 'confirmPickup'])->name('orders.pickup');
+        Route::post('orders/{order}/deliver', [CourierController::class, 'confirmDelivery'])->name('orders.deliver');
     });
 
 require __DIR__.'/auth.php';
