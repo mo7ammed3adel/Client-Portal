@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\PhoneNumber;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ClientController extends Controller
@@ -20,7 +22,8 @@ class ClientController extends Controller
             ->when($search, function ($query) use ($search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");
                 });
             })
             ->withCount(['tasks', 'invoices'])
@@ -41,12 +44,22 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
+        $phone = PhoneNumber::toE164($validated['phone']);
+
+        if (User::query()->where('phone', $phone)->exists()) {
+            throw ValidationException::withMessages([
+                'phone' => 'A user already exists for this phone.',
+            ]);
+        }
 
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $phone,
             'password' => Hash::make($validated['password']),
             'role' => 'client',
         ]);
@@ -70,12 +83,22 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($client)],
+            'phone' => ['required', 'string', 'max:20'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
+
+        $phone = PhoneNumber::toE164($validated['phone']);
+
+        if (User::query()->where('phone', $phone)->whereKeyNot($client->id)->exists()) {
+            throw ValidationException::withMessages([
+                'phone' => 'A user already exists for this phone.',
+            ]);
+        }
 
         $client->fill([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $phone,
         ]);
 
         if (! empty($validated['password'])) {

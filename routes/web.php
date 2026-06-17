@@ -4,9 +4,11 @@ use App\Http\Controllers\Admin\ClientController as AdminClientController;
 use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
 use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 use App\Http\Controllers\Client\BillingController;
+use App\Http\Controllers\Client\InvoicePaymentController;
 use App\Http\Controllers\Client\RequestController as ClientRequestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Webhooks\KashierWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,6 +35,7 @@ Route::middleware(['auth', 'verified', 'role:client'])
             ->only(['index', 'create', 'store', 'show'])
             ->parameters(['requests' => 'task']);
         Route::get('billing', BillingController::class)->name('billing.index');
+        Route::post('billing/{invoice}/pay', InvoicePaymentController::class)->name('billing.pay');
     });
 
 Route::middleware(['auth', 'verified', 'role:admin'])
@@ -46,3 +49,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     });
 
 require __DIR__.'/auth.php';
+
+Route::get('webhooks/kashier', [KashierWebhookController::class, 'returnRedirect'])->name('kashier.return');
+Route::post('webhooks/kashier', [KashierWebhookController::class, 'handle'])->name('kashier.webhook');

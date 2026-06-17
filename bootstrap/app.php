@@ -15,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => EnsureRole::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/kashier',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

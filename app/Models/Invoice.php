@@ -18,6 +18,11 @@ class Invoice extends Model
         'amount',
         'due_date',
         'status',
+        'kashier_merchant_order_id',
+        'kashier_order_id',
+        'kashier_transaction_id',
+        'payment_method',
+        'paid_at',
     ];
 
     protected function casts(): array
@@ -25,6 +30,7 @@ class Invoice extends Model
         return [
             'amount' => 'decimal:2',
             'due_date' => 'date',
+            'paid_at' => 'datetime',
             'created_at' => 'datetime',
         ];
     }

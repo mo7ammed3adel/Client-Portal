@@ -28,11 +28,18 @@
         </label>
 
         <div class="flex items-center justify-between gap-4">
-            @if (Route::has('password.request'))
-                <a class="text-sm font-semibold text-slate-500 hover:text-blue-600 dark:text-slate-400" href="{{ route('password.request') }}">
-                    Forgot password?
-                </a>
-            @endif
+            <div class="flex flex-col gap-2 text-sm font-semibold sm:flex-row sm:items-center sm:gap-4">
+                @if (Route::has('password.request'))
+                    <a class="text-slate-500 hover:text-blue-600 dark:text-slate-400" href="{{ route('password.request') }}">
+                        Forgot password?
+                    </a>
+                @endif
+                @if (Route::has('register'))
+                    <a class="text-slate-500 hover:text-blue-600 dark:text-slate-400" href="{{ route('register') }}">
+                        Create account
+                    </a>
+                @endif
+            </div>
 
             <x-primary-button>
                 Sign In
@@ -40,4 +47,3 @@
         </div>
     </form>
 </x-guest-layout>
-

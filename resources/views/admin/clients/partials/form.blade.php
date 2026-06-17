@@ -11,6 +11,12 @@
         <x-input-error :messages="$errors->get('email')" class="mt-2" />
     </div>
 
+    <div>
+        <label for="phone" class="portal-label">Phone</label>
+        <input id="phone" name="phone" type="tel" value="{{ old('phone', $client?->phone) }}" class="portal-input" required placeholder="01012345678">
+        <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+    </div>
+
     <div class="grid gap-5 sm:grid-cols-2">
         <div>
             <label for="password" class="portal-label">{{ $client ? 'New Password' : 'Password' }}</label>
@@ -28,4 +34,3 @@
         <button class="portal-button">{{ $client ? 'Save Changes' : 'Create Client' }}</button>
     </div>
 </div>
-

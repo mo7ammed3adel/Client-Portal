@@ -19,7 +19,7 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -28,6 +28,32 @@ class AuthenticationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_clients_verify_otp_before_login_completes(): void
+    {
+        config(['services.sms.otp_fixed_code' => '123456']);
+
+        $user = User::factory()->create([
+            'role' => 'client',
+            'phone' => '+201001234567',
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('otp.show', absolute: false));
+
+        $response = $this->post(route('otp.verify'), [
+            'otp' => '123456',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        $response->assertRedirect(route('dashboard', absolute: false));
+        $this->assertNotNull($user->fresh()->phone_verified_at);
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
