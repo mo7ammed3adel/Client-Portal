@@ -33,14 +33,14 @@ class RequestController extends Controller
             'address_details' => ['required', 'string', 'max:5000'],
         ]);
 
-        $validated['title'] = 'Delivery order';
+        $validated['title'] = 'طلب توصيل';
         $validated['description'] = $validated['address_details'];
 
         $request->user()->tasks()->create($validated);
 
         return redirect()
             ->route('client.requests.index')
-            ->with('status', 'Delivery order submitted successfully.');
+            ->with('status', 'تم إرسال طلب التوصيل بنجاح.');
     }
 
     public function show(Request $request, MarketingTask $task): View

@@ -52,7 +52,7 @@ class KashierWebhookController extends Controller
         }
 
         $merchantOrderId = (string) ($query['merchantOrderId'] ?? '');
-        $status = $this->paymentRecorded($merchantOrderId) ? 'Payment recorded successfully.' : 'Payment could not be confirmed yet.';
+        $status = $this->paymentRecorded($merchantOrderId) ? 'تم تسجيل الدفع بنجاح.' : 'لم يتم تأكيد الدفع حتى الآن.';
 
         return redirect()
             ->route('client.billing.index')

@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
                 Auth::guard('web')->logout();
 
                 throw ValidationException::withMessages([
-                    'email' => 'This client account needs a phone number before OTP login can be used.',
+                    'email' => 'هذا الحساب يحتاج إلى رقم هاتف قبل استخدام تسجيل الدخول بكود التحقق.',
                 ]);
             }
 
@@ -63,9 +63,9 @@ class AuthenticatedSessionController extends Controller
                 'remember' => $request->boolean('remember'),
             ]);
 
-            $status = 'OTP sent to your phone.';
+            $status = 'تم إرسال كود التحقق إلى هاتفك.';
             if (config('services.sms.otp_debug')) {
-                $status .= " Code: {$otp}";
+                $status .= " الكود: {$otp}";
             }
 
             return redirect()->route('otp.show')->with('status', $status);

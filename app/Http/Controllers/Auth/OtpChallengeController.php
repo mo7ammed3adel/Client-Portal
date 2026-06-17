@@ -80,9 +80,9 @@ class OtpChallengeController extends Controller
             ]);
         }
 
-        $status = 'OTP sent to your phone.';
+        $status = 'تم إرسال كود التحقق إلى هاتفك.';
         if (config('services.sms.otp_debug')) {
-            $status .= " Code: {$otp}";
+            $status .= " الكود: {$otp}";
         }
 
         return back()->with('status', $status);
@@ -100,7 +100,7 @@ class OtpChallengeController extends Controller
             $request->session()->forget('auth.otp');
 
             throw ValidationException::withMessages([
-                'otp' => 'This account was already registered. Please log in.',
+                'otp' => 'هذا الحساب مسجل بالفعل. من فضلك سجل الدخول.',
             ]);
         }
 

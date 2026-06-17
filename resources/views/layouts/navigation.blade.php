@@ -4,27 +4,27 @@
             <div class="flex items-center gap-8">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
                     <span class="grid h-9 w-9 place-items-center rounded-lg bg-blue-600 text-sm font-black text-white">CP</span>
-                    <span class="font-bold text-slate-950 dark:text-white">Client Portal</span>
+                    <span class="font-bold text-slate-950 dark:text-white">بوابة العملاء</span>
                 </a>
 
                 @auth
                     <div class="hidden items-center gap-2 sm:flex">
                         @if (auth()->user()->isAdmin())
                             <x-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">
-                                Clients
+                                العملاء
                             </x-nav-link>
                             <x-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">
-                                Orders
+                                الطلبات
                             </x-nav-link>
                             <x-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">
-                                Invoices
+                                الفواتير
                             </x-nav-link>
                         @else
                             <x-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">
-                                Orders
+                                الطلبات
                             </x-nav-link>
                             <x-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">
-                                Billing
+                                المدفوعات
                             </x-nav-link>
                         @endif
                         <x-nav-link :href="route('policies')" :active="request()->routeIs('policies')">
@@ -36,8 +36,11 @@
 
             <div class="hidden items-center gap-3 sm:flex">
                 @auth
+                    @php
+                        $roleLabel = auth()->user()->isAdmin() ? 'مدير' : 'عميل';
+                    @endphp
                     <span class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                        {{ auth()->user()->role }}
+                        {{ $roleLabel }}
                     </span>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -50,11 +53,11 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">Profile</x-dropdown-link>
+                            <x-dropdown-link :href="route('profile.edit')">الملف الشخصي</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                    Log Out
+                                    تسجيل الخروج
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
@@ -75,18 +78,18 @@
         @auth
             <div class="space-y-1 px-4 py-3">
                 @if (auth()->user()->isAdmin())
-                    <x-responsive-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">Clients</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">Orders</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">Invoices</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">العملاء</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">الطلبات</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">الفواتير</x-responsive-nav-link>
                 @else
-                    <x-responsive-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">Orders</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">Billing</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">الطلبات</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">المدفوعات</x-responsive-nav-link>
                 @endif
                 <x-responsive-nav-link :href="route('policies')" :active="request()->routeIs('policies')">سياسات التعامل</x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('profile.edit')">Profile</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('profile.edit')">الملف الشخصي</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">تسجيل الخروج</x-responsive-nav-link>
                 </form>
             </div>
         @endauth

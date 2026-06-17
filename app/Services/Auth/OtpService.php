@@ -48,12 +48,12 @@ class OtpService
         $storedHash = $this->cache->get($otpKey);
 
         if (! $storedHash) {
-            throw new InvalidOtpException('OTP has expired or does not exist.');
+            throw new InvalidOtpException('انتهت صلاحية كود التحقق أو لم يعد موجوداً.');
         }
 
         if (! hash_equals($storedHash, hash('sha256', $otp))) {
             $this->cache->put($attemptKey, $attempts + 1, $this->otpTtl());
-            throw new InvalidOtpException('Invalid OTP code.');
+            throw new InvalidOtpException('كود التحقق غير صحيح.');
         }
 
         $this->cache->forget($otpKey);

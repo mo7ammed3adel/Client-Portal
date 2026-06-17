@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
 
         if (User::query()->where('phone', $phone)->exists()) {
             throw ValidationException::withMessages([
-                'phone' => 'A user already exists for this phone.',
+                'phone' => 'يوجد مستخدم مسجل بهذا الرقم بالفعل.',
             ]);
         }
 
@@ -67,9 +67,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->string('password')->toString()),
         ]);
 
-        $status = 'OTP sent to your phone.';
+        $status = 'تم إرسال كود التحقق إلى هاتفك.';
         if (config('services.sms.otp_debug')) {
-            $status .= " Code: {$otp}";
+            $status .= " الكود: {$otp}";
         }
 
         return redirect()->route('otp.show')->with('status', $status);

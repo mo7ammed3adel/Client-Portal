@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h1 class="portal-title">Create Client</h1>
-            <p class="portal-muted mt-1">Client accounts are created only by the admin.</p>
+            <h1 class="portal-title">إنشاء عميل</h1>
+            <p class="portal-muted mt-1">حسابات العملاء يتم إنشاؤها من خلال الإدارة فقط.</p>
         </div>
     </x-slot>
 
@@ -13,4 +13,3 @@
         </form>
     </div>
 </x-app-layout>
-

@@ -45,14 +45,14 @@ class VonageSmsService implements SmsServiceContract
                 'status' => $response->status(),
                 'body' => $response->body(),
             ]);
-            throw new SmsDeliveryException('vonage', (string) $response->status(), $response->body() ?: 'Vonage error');
+            throw new SmsDeliveryException('vonage', (string) $response->status(), $response->body() ?: 'تعذر إرسال الرسالة عبر Vonage.');
         }
 
         $data = $response->json();
         $messageStatus = (string) ($data['messages'][0]['status'] ?? '99');
 
         if ($messageStatus !== '0') {
-            $errorText = (string) ($data['messages'][0]['error-text'] ?? 'Unknown error');
+            $errorText = (string) ($data['messages'][0]['error-text'] ?? 'حدث خطأ غير معروف.');
 
             Log::error('Vonage SMS rejected', [
                 'phone' => PhoneNumber::mask($phone),
@@ -81,9 +81,9 @@ class VonageSmsService implements SmsServiceContract
         $appName = config('app.name');
 
         return match ($context) {
-            'registration' => "{$appName}: Your registration code is {$otp}. Valid for 5 minutes.",
-            'login' => "{$appName}: Your login code is {$otp}. Valid for 5 minutes.",
-            default => "{$appName}: Your verification code is {$otp}. Valid for 5 minutes.",
+            'registration' => "{$appName}: كود إنشاء الحساب هو {$otp}. صالح لمدة 5 دقائق.",
+            'login' => "{$appName}: كود تسجيل الدخول هو {$otp}. صالح لمدة 5 دقائق.",
+            default => "{$appName}: كود التحقق هو {$otp}. صالح لمدة 5 دقائق.",
         };
     }
 }

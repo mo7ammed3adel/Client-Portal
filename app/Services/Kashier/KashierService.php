@@ -267,8 +267,8 @@ class KashierService
         Log::warning('kashier.config.invalid', ['missing' => $missing]);
 
         throw new KashierApiException(
-            'Missing Kashier configuration: '.implode(', ', $missing),
-            'Kashier payment configuration is incomplete.'
+            'إعدادات كاشير الناقصة: '.implode(', ', $missing),
+            'إعدادات الدفع من كاشير غير مكتملة.'
         );
     }
 }

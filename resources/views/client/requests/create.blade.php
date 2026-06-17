@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="flex justify-end gap-3">
-                    <a href="{{ route('client.requests.index') }}" class="portal-button-secondary">Cancel</a>
+                    <a href="{{ route('client.requests.index') }}" class="portal-button-secondary">إلغاء</a>
                     <button class="portal-button">إرسال طلب التوصيل</button>
                 </div>
             </div>

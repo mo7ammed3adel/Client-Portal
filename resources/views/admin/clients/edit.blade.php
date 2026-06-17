@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div>
-            <h1 class="portal-title">Edit Client</h1>
+            <h1 class="portal-title">تعديل بيانات العميل</h1>
             <p class="portal-muted mt-1">{{ $client->email }}</p>
         </div>
     </x-slot>
@@ -14,4 +14,3 @@
         </form>
     </div>
 </x-app-layout>
-

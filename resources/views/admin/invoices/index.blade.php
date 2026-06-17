@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="portal-title">Invoice Management</h1>
-                <p class="portal-muted mt-1">Create invoices and track manual payment status.</p>
+                <h1 class="portal-title">إدارة الفواتير</h1>
+                <p class="portal-muted mt-1">إنشاء الفواتير ومتابعة حالة الدفع.</p>
             </div>
-            <a href="{{ route('admin.invoices.create') }}" class="portal-button">Create Invoice</a>
+            <a href="{{ route('admin.invoices.create') }}" class="portal-button">إنشاء فاتورة</a>
         </div>
     </x-slot>
 
@@ -18,17 +18,17 @@
 
         <div class="portal-card overflow-hidden">
             @if ($invoices->isEmpty())
-                <div class="p-8 text-center text-sm text-slate-500">No invoices yet.</div>
+                <div class="p-8 text-center text-sm text-slate-500">لا توجد فواتير حتى الآن.</div>
             @else
                 <div class="overflow-x-auto">
                     <table class="portal-table">
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Client</th>
-                                <th>Amount</th>
-                                <th>Due Date</th>
-                                <th>Status</th>
+                                <th>الفاتورة</th>
+                                <th>العميل</th>
+                                <th>المبلغ</th>
+                                <th>تاريخ الاستحقاق</th>
+                                <th>الحالة</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -37,19 +37,19 @@
                                 <tr>
                                     <td class="font-bold">{{ $invoice->invoice_number }}</td>
                                     <td>{{ $invoice->client->name }}</td>
-                                    <td>${{ number_format($invoice->amount, 2) }}</td>
-                                    <td>{{ $invoice->due_date->format('M d, Y') }}</td>
+                                    <td>{{ number_format($invoice->amount, 2) }} ج.م</td>
+                                    <td>{{ $invoice->due_date->format('Y/m/d') }}</td>
                                     <td><x-status-badge :status="$invoice->status" /></td>
                                     <td>
                                         <form method="POST" action="{{ route('admin.invoices.update', $invoice) }}" class="flex justify-end gap-2">
                                             @csrf
                                             @method('PATCH')
                                             <select name="status" class="portal-input mt-0 w-36">
-                                                <option value="pending" @selected($invoice->status === 'pending')>Pending</option>
-                                                <option value="paid" @selected($invoice->status === 'paid')>Paid</option>
-                                                <option value="overdue" @selected($invoice->status === 'overdue')>Overdue</option>
+                                                <option value="pending" @selected($invoice->status === 'pending')>قيد الانتظار</option>
+                                                <option value="paid" @selected($invoice->status === 'paid')>مدفوع</option>
+                                                <option value="overdue" @selected($invoice->status === 'overdue')>متأخر</option>
                                             </select>
-                                            <button class="portal-button-secondary px-3 py-2">Save</button>
+                                            <button class="portal-button-secondary px-3 py-2">حفظ</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -62,4 +62,3 @@
         </div>
     </div>
 </x-app-layout>
-

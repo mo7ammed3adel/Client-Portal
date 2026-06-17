@@ -44,7 +44,7 @@ class TwilioSmsService implements SmsServiceContract
 
         if ($response->failed()) {
             $code = (string) ($response->json('code') ?? $response->status());
-            $message = (string) ($response->json('message') ?? $response->body() ?? 'Twilio error');
+            $message = (string) ($response->json('message') ?? $response->body() ?? 'تعذر إرسال الرسالة عبر Twilio.');
 
             Log::error('Twilio SMS HTTP error', [
                 'phone' => PhoneNumber::mask($phone),
@@ -74,9 +74,9 @@ class TwilioSmsService implements SmsServiceContract
         $appName = config('app.name');
 
         return match ($context) {
-            'registration' => "{$appName}: Your registration code is {$otp}. Valid for 5 minutes.",
-            'login' => "{$appName}: Your login code is {$otp}. Valid for 5 minutes.",
-            default => "{$appName}: Your verification code is {$otp}. Valid for 5 minutes.",
+            'registration' => "{$appName}: كود إنشاء الحساب هو {$otp}. صالح لمدة 5 دقائق.",
+            'login' => "{$appName}: كود تسجيل الدخول هو {$otp}. صالح لمدة 5 دقائق.",
+            default => "{$appName}: كود التحقق هو {$otp}. صالح لمدة 5 دقائق.",
         };
     }
 }

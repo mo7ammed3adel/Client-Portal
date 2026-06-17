@@ -42,7 +42,7 @@ class InvoicePaymentController extends Controller
         if ($invoice->status === 'paid') {
             return redirect()
                 ->route('client.billing.index')
-                ->with('status', 'Invoice is already paid.');
+                ->with('status', 'تم دفع هذه الفاتورة بالفعل.');
         }
 
         $validated = $request->validate([

@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         User::query()->updateOrCreate(
             ['email' => 'admin@clientportal.test'],
             [
-                'name' => 'Marketing Consultant',
+                'name' => 'مدير النظام',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ]
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         $client = User::query()->updateOrCreate(
             ['email' => 'client@clientportal.test'],
             [
-                'name' => 'Acme Studio',
+                'name' => 'عميل تجريبي',
                 'phone' => '+201000000000',
                 'phone_verified_at' => now(),
                 'password' => Hash::make('password'),
@@ -36,20 +36,20 @@ class DatabaseSeeder extends Seeder
         if ($client->tasks()->doesntExist()) {
             $client->tasks()->createMany([
                 [
-                    'title' => 'Delivery order',
-                    'description' => 'Building 12, second floor, apartment 5.',
+                    'title' => 'طلب توصيل',
+                    'description' => 'عمارة 12، الدور الثاني، شقة 5.',
                     'status' => 'pending',
                     'delivery_latitude' => 30.0444000,
                     'delivery_longitude' => 31.2357000,
-                    'address_details' => 'Building 12, second floor, apartment 5. Near Tahrir Square.',
+                    'address_details' => 'عمارة 12، الدور الثاني، شقة 5. بالقرب من ميدان التحرير.',
                 ],
                 [
-                    'title' => 'Delivery order',
-                    'description' => 'Villa 7, gate 3, ring the outside bell.',
+                    'title' => 'طلب توصيل',
+                    'description' => 'فيلا 7، بوابة 3، يرجى الضغط على الجرس الخارجي.',
                     'status' => 'in_progress',
                     'delivery_latitude' => 30.0131000,
                     'delivery_longitude' => 31.2089000,
-                    'address_details' => 'Villa 7, gate 3, ring the outside bell. Call before arrival.',
+                    'address_details' => 'فيلا 7، بوابة 3، يرجى الضغط على الجرس الخارجي. الاتصال قبل الوصول.',
                 ],
             ]);
         }

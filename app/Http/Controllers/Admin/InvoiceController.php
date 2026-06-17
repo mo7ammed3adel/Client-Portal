@@ -45,7 +45,7 @@ class InvoiceController extends Controller
 
         return redirect()
             ->route('admin.invoices.index')
-            ->with('status', 'Invoice created.');
+            ->with('status', 'تم إنشاء الفاتورة.');
     }
 
     public function update(Request $request, Invoice $invoice): RedirectResponse
@@ -56,6 +56,6 @@ class InvoiceController extends Controller
 
         $invoice->update($validated);
 
-        return back()->with('status', 'Invoice status updated.');
+        return back()->with('status', 'تم تحديث حالة الفاتورة.');
     }
 }

@@ -31,6 +31,6 @@ class RequestController extends Controller
 
         $task->update($validated);
 
-        return back()->with('status', 'Request status updated.');
+        return back()->with('status', 'تم تحديث حالة الطلب.');
     }
 }

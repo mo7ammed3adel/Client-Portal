@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="portal-title">Delivery Orders</h1>
-                <p class="portal-muted mt-1">Track delivery locations and order status.</p>
+                <h1 class="portal-title">طلبات التوصيل</h1>
+                <p class="portal-muted mt-1">تابع عناوين التوصيل وحالة كل طلب.</p>
             </div>
-            <a href="{{ route('client.requests.create') }}" class="portal-button">New Order</a>
+            <a href="{{ route('client.requests.create') }}" class="portal-button">طلب جديد</a>
         </div>
     </x-slot>
 
@@ -17,9 +17,9 @@
         @endif
 
         @if ($tasks->isEmpty())
-            <x-empty-state title="No delivery orders yet" message="Create your first delivery order by choosing a point on the map.">
+            <x-empty-state title="لا توجد طلبات توصيل بعد" message="أنشئ أول طلب توصيل باختيار نقطة على الخريطة.">
                 <x-slot name="action">
-                    <a href="{{ route('client.requests.create') }}" class="portal-button">Create Order</a>
+                    <a href="{{ route('client.requests.create') }}" class="portal-button">إنشاء طلب</a>
                 </x-slot>
             </x-empty-state>
         @else
@@ -28,7 +28,7 @@
                     <a href="{{ route('client.requests.show', $task) }}" class="portal-card transition hover:-translate-y-0.5 hover:shadow-md">
                         <div class="portal-card-body">
                             <div class="flex items-start justify-between gap-3">
-                                <h2 class="font-bold text-slate-950 dark:text-white">Delivery Order #{{ $task->id }}</h2>
+                                <h2 class="font-bold text-slate-950 dark:text-white">طلب توصيل رقم {{ $task->id }}</h2>
                                 <x-status-badge :status="$task->status" />
                             </div>
                             <p class="mt-3 line-clamp-3 text-sm text-slate-500 dark:text-slate-400">{{ $task->address_details ?? $task->description }}</p>
@@ -37,7 +37,7 @@
                                     {{ $task->delivery_latitude }}, {{ $task->delivery_longitude }}
                                 </p>
                             @endif
-                            <p class="mt-4 text-xs font-semibold text-slate-400">{{ $task->created_at->format('M d, Y') }}</p>
+                            <p class="mt-4 text-xs font-semibold text-slate-400">{{ $task->created_at->format('Y/m/d') }}</p>
                         </div>
                     </a>
                 @endforeach

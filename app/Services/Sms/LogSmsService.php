@@ -38,9 +38,9 @@ class LogSmsService implements SmsServiceContract
         $appName = config('app.name');
 
         return match ($context) {
-            'registration' => "{$appName}: Your registration code is {$otp}. Valid for 5 minutes.",
-            'login' => "{$appName}: Your login code is {$otp}. Valid for 5 minutes.",
-            default => "{$appName}: Your verification code is {$otp}. Valid for 5 minutes.",
+            'registration' => "{$appName}: كود إنشاء الحساب هو {$otp}. صالح لمدة 5 دقائق.",
+            'login' => "{$appName}: كود تسجيل الدخول هو {$otp}. صالح لمدة 5 دقائق.",
+            default => "{$appName}: كود التحقق هو {$otp}. صالح لمدة 5 دقائق.",
         };
     }
 }

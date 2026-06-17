@@ -52,7 +52,7 @@ class ClientController extends Controller
 
         if (User::query()->where('phone', $phone)->exists()) {
             throw ValidationException::withMessages([
-                'phone' => 'A user already exists for this phone.',
+                'phone' => 'يوجد مستخدم مسجل بهذا الرقم بالفعل.',
             ]);
         }
 
@@ -66,7 +66,7 @@ class ClientController extends Controller
 
         return redirect()
             ->route('admin.clients.index')
-            ->with('status', 'Client account created.');
+            ->with('status', 'تم إنشاء حساب العميل.');
     }
 
     public function edit(User $client): View
@@ -91,7 +91,7 @@ class ClientController extends Controller
 
         if (User::query()->where('phone', $phone)->whereKeyNot($client->id)->exists()) {
             throw ValidationException::withMessages([
-                'phone' => 'A user already exists for this phone.',
+                'phone' => 'يوجد مستخدم مسجل بهذا الرقم بالفعل.',
             ]);
         }
 
@@ -109,7 +109,7 @@ class ClientController extends Controller
 
         return redirect()
             ->route('admin.clients.index')
-            ->with('status', 'Client updated.');
+            ->with('status', 'تم تحديث بيانات العميل.');
     }
 
     public function destroy(User $client): RedirectResponse
@@ -120,6 +120,6 @@ class ClientController extends Controller
 
         return redirect()
             ->route('admin.clients.index')
-            ->with('status', 'Client deleted.');
+            ->with('status', 'تم حذف العميل.');
     }
 }

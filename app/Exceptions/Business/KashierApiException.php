@@ -8,7 +8,7 @@ class KashierApiException extends HttpException
 {
     public function __construct(
         public readonly string $kashierMessage,
-        string $message = 'Kashier API error.'
+        string $message = 'حدث خطأ أثناء الاتصال ببوابة كاشير.'
     ) {
         parent::__construct(502, $message);
     }
