@@ -130,8 +130,8 @@
                     <div class="relative mx-auto max-w-md">
                         <div class="absolute -inset-4 rounded-[2.5rem] bg-brand-500/10 blur-2xl"></div>
                         <div class="absolute -right-4 -top-4 hex h-20 w-20 bg-accent-500/15"></div>
-                        <div class="relative overflow-hidden rounded-[2rem] border border-slate-100 bg-white p-6 shadow-2xl shadow-ink-900/5">
-                            <img src="{{ asset('brand/motorcycle.gif') }}" alt="مندوب طلبة على الموتوسيكل" class="mx-auto w-full max-w-sm" loading="lazy">
+                        <div class="relative overflow-hidden rounded-[2rem] border border-slate-100 bg-white p-8 shadow-2xl shadow-ink-900/5">
+                            @include('partials.illustrations.scooter')
                         </div>
                     </div>
                 </div>
