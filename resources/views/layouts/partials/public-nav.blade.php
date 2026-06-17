@@ -1,6 +1,7 @@
 @php
     $navLinks = [
         ['route' => 'home', 'label' => 'الرئيسية', 'pattern' => 'home'],
+        ['route' => 'pricing', 'label' => 'الأسعار', 'pattern' => 'pricing'],
         ['route' => 'order.create', 'label' => 'إنشاء طلب', 'pattern' => 'order.create'],
         ['route' => 'order.track', 'label' => 'تتبع شحنة', 'pattern' => 'order.track'],
         ['route' => 'about', 'label' => 'من نحن', 'pattern' => 'about'],

@@ -13,6 +13,7 @@ class PortalAccessTest extends TestCase
     public function test_public_pages_are_accessible_without_login(): void
     {
         $this->get(route('home'))->assertOk();
+        $this->get(route('pricing'))->assertOk();
         $this->get(route('about'))->assertOk();
         $this->get(route('contact'))->assertOk();
         $this->get(route('order.create'))->assertOk();
