@@ -7,6 +7,7 @@
     },
     "scripts": {
         "build": "vite build",
+        "postbuild": "node scripts/create-vercel-redirect.mjs",
         "dev": "vite"
     },
     "devDependencies": {

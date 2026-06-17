@@ -3,11 +3,10 @@
     "installCommand": "npm ci",
     "buildCommand": "npm run build",
     "outputDirectory": "public/build",
-    "redirects": [
+    "rewrites": [
         {
             "source": "/:path*",
-            "destination": "https://client-portal.up.railway.app/:path*",
-            "permanent": false
+            "destination": "/index.html"
         }
     ]
 }

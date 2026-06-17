@@ -69,11 +69,11 @@ If you pasted a real database password into a chat or ticket, rotate/regenerate 
 
 ## Vercel
 
-If you still connect this repo to Vercel, the included `vercel.json` redirects all requests to Railway:
+If you still connect this repo to Vercel, the build creates a tiny `public/build/index.html` redirect page and `vercel.json` rewrites all requests to it:
 
 - Framework preset: Other
 - Build command: `npm run build`
 - Output directory: `public/build`
-- Redirect target: `https://client-portal.up.railway.app/:path*`
+- Redirect target: `https://client-portal.up.railway.app`
 
 Vercel should not be treated as the Laravel runtime. It only forwards visitors to the Railway deployment where PHP, sessions, database access, and Kashier webhooks run.
