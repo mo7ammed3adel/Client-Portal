@@ -14,14 +14,14 @@
                                 Clients
                             </x-nav-link>
                             <x-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">
-                                Requests
+                                Orders
                             </x-nav-link>
                             <x-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">
                                 Invoices
                             </x-nav-link>
                         @else
                             <x-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">
-                                Requests
+                                Orders
                             </x-nav-link>
                             <x-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">
                                 Billing
@@ -73,10 +73,10 @@
             <div class="space-y-1 px-4 py-3">
                 @if (auth()->user()->isAdmin())
                     <x-responsive-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">Clients</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">Requests</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">Orders</x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">Invoices</x-responsive-nav-link>
                 @else
-                    <x-responsive-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">Requests</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">Orders</x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">Billing</x-responsive-nav-link>
                 @endif
                 <x-responsive-nav-link :href="route('profile.edit')">Profile</x-responsive-nav-link>

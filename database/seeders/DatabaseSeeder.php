@@ -36,15 +36,20 @@ class DatabaseSeeder extends Seeder
         if ($client->tasks()->doesntExist()) {
             $client->tasks()->createMany([
                 [
-                    'title' => 'Instagram campaign creatives',
-                    'description' => 'Create three launch visuals for the new skincare offer.',
+                    'title' => 'Delivery order',
+                    'description' => 'Building 12, second floor, apartment 5.',
                     'status' => 'pending',
-                    'notes' => 'Brand colors and examples attached in the shared drive.',
+                    'delivery_latitude' => 30.0444000,
+                    'delivery_longitude' => 31.2357000,
+                    'address_details' => 'Building 12, second floor, apartment 5. Near Tahrir Square.',
                 ],
                 [
-                    'title' => 'Landing page copy polish',
-                    'description' => 'Review the home page headline, CTA hierarchy, and proof section.',
+                    'title' => 'Delivery order',
+                    'description' => 'Villa 7, gate 3, ring the outside bell.',
                     'status' => 'in_progress',
+                    'delivery_latitude' => 30.0131000,
+                    'delivery_longitude' => 31.2089000,
+                    'address_details' => 'Villa 7, gate 3, ring the outside bell. Call before arrival.',
                 ],
             ]);
         }

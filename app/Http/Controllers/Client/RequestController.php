@@ -28,21 +28,19 @@ class RequestController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:5000'],
-            'notes' => ['nullable', 'string', 'max:5000'],
-            'reference' => ['nullable', 'image', 'max:4096'],
+            'delivery_latitude' => ['required', 'numeric', 'between:-90,90'],
+            'delivery_longitude' => ['required', 'numeric', 'between:-180,180'],
+            'address_details' => ['required', 'string', 'max:5000'],
         ]);
 
-        if ($request->hasFile('reference')) {
-            $validated['image_path'] = $request->file('reference')->store('task-references', 'public');
-        }
+        $validated['title'] = 'Delivery order';
+        $validated['description'] = $validated['address_details'];
 
         $request->user()->tasks()->create($validated);
 
         return redirect()
             ->route('client.requests.index')
-            ->with('status', 'Request submitted successfully.');
+            ->with('status', 'Delivery order submitted successfully.');
     }
 
     public function show(Request $request, MarketingTask $task): View

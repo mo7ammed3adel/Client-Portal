@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 class="portal-title">Requests</h1>
-                <p class="portal-muted mt-1">Track creative and marketing work in one place.</p>
+                <h1 class="portal-title">Delivery Orders</h1>
+                <p class="portal-muted mt-1">Track delivery locations and order status.</p>
             </div>
-            <a href="{{ route('client.requests.create') }}" class="portal-button">New Request</a>
+            <a href="{{ route('client.requests.create') }}" class="portal-button">New Order</a>
         </div>
     </x-slot>
 
@@ -17,24 +17,26 @@
         @endif
 
         @if ($tasks->isEmpty())
-            <x-empty-state title="No requests yet" message="Create your first request with a clear brief and optional reference image.">
+            <x-empty-state title="No delivery orders yet" message="Create your first delivery order by choosing a point on the map.">
                 <x-slot name="action">
-                    <a href="{{ route('client.requests.create') }}" class="portal-button">Create Request</a>
+                    <a href="{{ route('client.requests.create') }}" class="portal-button">Create Order</a>
                 </x-slot>
             </x-empty-state>
         @else
             <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 @foreach ($tasks as $task)
                     <a href="{{ route('client.requests.show', $task) }}" class="portal-card transition hover:-translate-y-0.5 hover:shadow-md">
-                        @if ($task->reference_url)
-                            <img src="{{ $task->reference_url }}" alt="" class="h-40 w-full rounded-t-lg object-cover">
-                        @endif
                         <div class="portal-card-body">
                             <div class="flex items-start justify-between gap-3">
-                                <h2 class="font-bold text-slate-950 dark:text-white">{{ $task->title }}</h2>
+                                <h2 class="font-bold text-slate-950 dark:text-white">Delivery Order #{{ $task->id }}</h2>
                                 <x-status-badge :status="$task->status" />
                             </div>
-                            <p class="mt-3 line-clamp-3 text-sm text-slate-500 dark:text-slate-400">{{ $task->description }}</p>
+                            <p class="mt-3 line-clamp-3 text-sm text-slate-500 dark:text-slate-400">{{ $task->address_details ?? $task->description }}</p>
+                            @if ($task->delivery_latitude && $task->delivery_longitude)
+                                <p class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400">
+                                    {{ $task->delivery_latitude }}, {{ $task->delivery_longitude }}
+                                </p>
+                            @endif
                             <p class="mt-4 text-xs font-semibold text-slate-400">{{ $task->created_at->format('M d, Y') }}</p>
                         </div>
                     </a>
@@ -45,4 +47,3 @@
         @endif
     </div>
 </x-app-layout>
-

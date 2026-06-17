@@ -22,11 +22,16 @@ class MarketingTask extends Model
         'status',
         'image_path',
         'notes',
+        'delivery_latitude',
+        'delivery_longitude',
+        'address_details',
     ];
 
     protected function casts(): array
     {
         return [
+            'delivery_latitude' => 'decimal:7',
+            'delivery_longitude' => 'decimal:7',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
