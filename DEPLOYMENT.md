@@ -17,7 +17,7 @@ Vercel can only publish the Vite-built static assets from `public/build` unless 
 Railway's MySQL plugin exposes variables like `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER`, and `MYSQLPASSWORD`. The app now reads those directly, so you can either attach/reference the MySQL variables or set the matching `DB_*` values manually.
 
 ```env
-APP_NAME="Client Portal"
+APP_NAME="طلبة"
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://your-railway-domain.up.railway.app
@@ -75,6 +75,6 @@ If you still connect this repo to Vercel, the build creates a tiny `public/build
 - Framework preset: Other
 - Build command: `npm run build`
 - Output directory: `public/build`
-- Redirect target: `https://client-portal.up.railway.app`
+- Redirect target: `https://talba.up.railway.app`
 
 Vercel should not be treated as the Laravel runtime. It only forwards visitors to the Railway deployment where PHP, sessions, database access, and Kashier webhooks run.

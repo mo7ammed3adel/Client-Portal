@@ -5,7 +5,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -55,20 +54,5 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
-    }
-
-    public function isClient(): bool
-    {
-        return $this->role === 'client';
-    }
-
-    public function tasks(): HasMany
-    {
-        return $this->hasMany(MarketingTask::class, 'client_id');
-    }
-
-    public function invoices(): HasMany
-    {
-        return $this->hasMany(Invoice::class, 'client_id');
     }
 }

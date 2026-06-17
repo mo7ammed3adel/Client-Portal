@@ -2,45 +2,34 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
             <div class="flex items-center gap-8">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <span class="grid h-9 w-9 place-items-center rounded-lg bg-blue-600 text-sm font-black text-white">CP</span>
-                    <span class="font-bold text-slate-950 dark:text-white">بوابة العملاء</span>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5">
+                    <x-brand-mark class="h-9 w-9" />
+                    <span class="font-black text-slate-950 dark:text-white">طلبة <span class="text-xs font-bold text-slate-400">· الإدارة</span></span>
                 </a>
 
                 @auth
                     <div class="hidden items-center gap-2 sm:flex">
-                        @if (auth()->user()->isAdmin())
-                            <x-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">
-                                العملاء
-                            </x-nav-link>
-                            <x-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">
-                                الطلبات
-                            </x-nav-link>
-                            <x-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">
-                                الفواتير
-                            </x-nav-link>
-                        @else
-                            <x-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">
-                                الطلبات
-                            </x-nav-link>
-                            <x-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">
-                                المدفوعات
-                            </x-nav-link>
-                        @endif
-                        <x-nav-link :href="route('policies')" :active="request()->routeIs('policies')">
-                            سياسات التعامل
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            لوحة التحكم
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
+                            الطلبات
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.*')">
+                            رسائل التواصل
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">
+                            الإعدادات
                         </x-nav-link>
                     </div>
                 @endauth
             </div>
 
             <div class="hidden items-center gap-3 sm:flex">
+                <a href="{{ route('home') }}" target="_blank" class="text-sm font-semibold text-slate-500 hover:text-brand-600">عرض الموقع ↗</a>
                 @auth
-                    @php
-                        $roleLabel = auth()->user()->isAdmin() ? 'مدير' : 'عميل';
-                    @endphp
                     <span class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold uppercase text-slate-500 dark:border-slate-800 dark:text-slate-400">
-                        {{ $roleLabel }}
+                        مدير
                     </span>
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -77,15 +66,11 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden border-t border-slate-200 dark:border-slate-800 sm:hidden">
         @auth
             <div class="space-y-1 px-4 py-3">
-                @if (auth()->user()->isAdmin())
-                    <x-responsive-nav-link :href="route('admin.clients.index')" :active="request()->routeIs('admin.clients.*')">العملاء</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.requests.index')" :active="request()->routeIs('admin.requests.*')">الطلبات</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.invoices.index')" :active="request()->routeIs('admin.invoices.*')">الفواتير</x-responsive-nav-link>
-                @else
-                    <x-responsive-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">الطلبات</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">المدفوعات</x-responsive-nav-link>
-                @endif
-                <x-responsive-nav-link :href="route('policies')" :active="request()->routeIs('policies')">سياسات التعامل</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">لوحة التحكم</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">الطلبات</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.contacts.index')" :active="request()->routeIs('admin.contacts.*')">رسائل التواصل</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">الإعدادات</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('home')">عرض الموقع</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('profile.edit')">الملف الشخصي</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

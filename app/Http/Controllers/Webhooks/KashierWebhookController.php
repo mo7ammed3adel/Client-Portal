@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Webhooks;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoice;
+use App\Models\Order;
 use App\Services\Kashier\KashierService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -46,17 +46,24 @@ class KashierWebhookController extends Controller
         $query = $request->query();
         $signatureOk = $this->kashierService->verifyRedirectSignature($query);
         $paid = strtoupper((string) ($query['paymentStatus'] ?? '')) === 'SUCCESS';
+        $merchantOrderId = (string) ($query['merchantOrderId'] ?? '');
 
         if ($signatureOk && $paid) {
             $this->recordPayment($this->normalizeRedirect($query));
         }
 
-        $merchantOrderId = (string) ($query['merchantOrderId'] ?? '');
-        $status = $this->paymentRecorded($merchantOrderId) ? 'تم تسجيل الدفع بنجاح.' : 'لم يتم تأكيد الدفع حتى الآن.';
+        $order = $this->resolveOrder($merchantOrderId);
 
-        return redirect()
-            ->route('client.billing.index')
-            ->with('status', $status);
+        if ($order && $order->isPaid()) {
+            return redirect()->route('order.success', $order->order_number);
+        }
+
+        // Give the webhook a moment / inquire before declaring failure.
+        if ($order && $this->paymentRecorded($merchantOrderId)) {
+            return redirect()->route('order.success', $order->fresh()->order_number);
+        }
+
+        return redirect()->route('order.failed', ['order' => $order?->id]);
     }
 
     /**
@@ -66,7 +73,9 @@ class KashierWebhookController extends Controller
     {
         $merchantOrderId = (string) ($payment['merchant_order_id'] ?? '');
 
-        if (! preg_match('/^invoice-(\d+)-/', $merchantOrderId, $matches)) {
+        $order = $this->resolveOrder($merchantOrderId);
+
+        if (! $order) {
             return;
         }
 
@@ -74,38 +83,47 @@ class KashierWebhookController extends Controller
             return;
         }
 
-        $invoice = Invoice::query()
-            ->whereKey((int) $matches[1])
-            ->where('kashier_merchant_order_id', $merchantOrderId)
-            ->first();
-
-        if (! $invoice) {
-            return;
-        }
-
         $paidAmount = (float) ($payment['amount'] ?? 0);
-        if (abs($paidAmount - (float) $invoice->amount) > 0.01) {
+        if (abs($paidAmount - (float) $order->total_cost) > 0.01) {
             Log::warning('kashier.amount_mismatch', [
-                'invoice_id' => $invoice->id,
+                'order_id' => $order->id,
                 'merchant_order_id' => $merchantOrderId,
-                'invoice_amount' => (float) $invoice->amount,
+                'order_amount' => (float) $order->total_cost,
                 'paid_amount' => $paidAmount,
             ]);
 
             return;
         }
 
-        if ($invoice->status === 'paid') {
+        if ($order->isPaid()) {
             return;
         }
 
-        $invoice->forceFill([
-            'status' => 'paid',
+        $order->forceFill([
+            'status' => 'confirmed',
+            'order_number' => $order->order_number ?: $this->generateOrderNumber($order),
             'kashier_order_id' => (string) ($payment['kashier_order_id'] ?? ''),
             'kashier_transaction_id' => (string) ($payment['transaction_id'] ?? ''),
-            'payment_method' => (string) ($payment['method'] ?? $invoice->payment_method),
+            'payment_method' => (string) ($payment['method'] ?? $order->payment_method),
             'paid_at' => now(),
         ])->save();
+    }
+
+    private function resolveOrder(string $merchantOrderId): ?Order
+    {
+        if (! preg_match('/^order-(\d+)-/', $merchantOrderId, $matches)) {
+            return null;
+        }
+
+        return Order::query()
+            ->whereKey((int) $matches[1])
+            ->where('kashier_merchant_order_id', $merchantOrderId)
+            ->first();
+    }
+
+    private function generateOrderNumber(Order $order): string
+    {
+        return 'TLB-'.now()->format('ymd').'-'.str_pad((string) $order->id, 5, '0', STR_PAD_LEFT);
     }
 
     private function paymentRecorded(string $merchantOrderId): bool
@@ -119,25 +137,28 @@ class KashierWebhookController extends Controller
                 usleep(500_000);
             }
 
-            if (Invoice::query()
-                ->where('kashier_merchant_order_id', $merchantOrderId)
-                ->where('status', 'paid')
-                ->exists()) {
+            if ($this->orderPaid($merchantOrderId)) {
                 return true;
             }
         }
 
         $payment = $this->kashierService->inquireTransaction($merchantOrderId);
         if ($payment) {
+            $payment['merchant_order_id'] = $merchantOrderId;
             $this->recordPayment($payment);
 
-            return Invoice::query()
-                ->where('kashier_merchant_order_id', $merchantOrderId)
-                ->where('status', 'paid')
-                ->exists();
+            return $this->orderPaid($merchantOrderId);
         }
 
         return false;
+    }
+
+    private function orderPaid(string $merchantOrderId): bool
+    {
+        return Order::query()
+            ->where('kashier_merchant_order_id', $merchantOrderId)
+            ->whereNotNull('paid_at')
+            ->exists();
     }
 
     /**

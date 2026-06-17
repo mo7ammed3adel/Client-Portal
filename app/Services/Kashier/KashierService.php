@@ -3,7 +3,7 @@
 namespace App\Services\Kashier;
 
 use App\Exceptions\Business\KashierApiException;
-use App\Models\Invoice;
+use App\Models\Order;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -33,11 +33,11 @@ class KashierService
         $this->timeout = (int) config('services.kashier.timeout', 20);
     }
 
-    public function createInvoicePayment(Invoice $invoice, string $method = 'card'): array
+    public function createOrderPayment(Order $order, string $method = 'card'): array
     {
-        $merchantOrderId = "invoice-{$invoice->id}-".(string) Str::uuid();
+        $merchantOrderId = "order-{$order->id}-".(string) Str::uuid();
 
-        return $this->buildHostedPayment($merchantOrderId, (float) $invoice->amount, $method);
+        return $this->buildHostedPayment($merchantOrderId, (float) $order->total_cost, $method);
     }
 
     public function verifyWebhookSignature(array $data, string $receivedSignature): bool

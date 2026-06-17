@@ -1,26 +1,45 @@
 <?php
 
-use App\Http\Controllers\Admin\ClientController as AdminClientController;
-use App\Http\Controllers\Admin\InvoiceController as AdminInvoiceController;
-use App\Http\Controllers\Admin\RequestController as AdminRequestController;
-use App\Http\Controllers\Client\BillingController;
-use App\Http\Controllers\Client\InvoicePaymentController;
-use App\Http\Controllers\Client\RequestController as ClientRequestController;
+use App\Http\Controllers\Admin\ContactRequestController as AdminContactController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Webhooks\KashierWebhookController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return auth()->check()
-        ? redirect()->route('dashboard')
-        : redirect()->route('login');
-});
+/*
+|--------------------------------------------------------------------------
+| Public website (no account required)
+|--------------------------------------------------------------------------
+*/
+Route::get('/', HomeController::class)->name('home');
+Route::get('/about', AboutController::class)->name('about');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::view('/policies', 'policies')->name('policies');
+// Public delivery order creation + payment
+Route::get('/create-order', [OrderController::class, 'create'])->name('order.create');
+Route::post('/orders', [OrderController::class, 'store'])->name('order.store');
+Route::post('/orders/{order}/retry-payment', [OrderController::class, 'retryPayment'])->name('order.retry');
+Route::get('/payment/success/{orderNumber}', [OrderController::class, 'success'])->name('order.success');
+Route::get('/payment/failed', [OrderController::class, 'failed'])->name('order.failed');
 
+// Public shipment tracking
+Route::get('/track', [OrderController::class, 'track'])->name('order.track');
+
+/*
+|--------------------------------------------------------------------------
+| Authenticated profile (admin)
+|--------------------------------------------------------------------------
+*/
 Route::get('/dashboard', DashboardController::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -29,29 +48,36 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'verified', 'role:client'])
-    ->prefix('client')
-    ->name('client.')
-    ->group(function (): void {
-        Route::resource('requests', ClientRequestController::class)
-            ->only(['index', 'create', 'store', 'show'])
-            ->parameters(['requests' => 'task']);
-        Route::get('billing', BillingController::class)->name('billing.index');
-        Route::post('billing/pay', [InvoicePaymentController::class, 'store'])->name('billing.pay.new');
-        Route::post('billing/{invoice}/pay', InvoicePaymentController::class)->name('billing.pay');
-    });
-
-Route::middleware(['auth', 'verified', 'role:admin'])
+/*
+|--------------------------------------------------------------------------
+| Administration area
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {
-        Route::resource('clients', AdminClientController::class)->except(['show']);
-        Route::get('requests', [AdminRequestController::class, 'index'])->name('requests.index');
-        Route::patch('requests/{task}', [AdminRequestController::class, 'update'])->name('requests.update');
-        Route::resource('invoices', AdminInvoiceController::class)->only(['index', 'create', 'store', 'update']);
+        Route::get('/', AdminDashboardController::class)->name('dashboard');
+
+        Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+        Route::patch('orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
+
+        Route::get('contacts', [AdminContactController::class, 'index'])->name('contacts.index');
+        Route::get('contacts/{contact}', [AdminContactController::class, 'show'])->name('contacts.show');
+        Route::patch('contacts/{contact}', [AdminContactController::class, 'update'])->name('contacts.update');
+        Route::delete('contacts/{contact}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
+
+        Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
+        Route::patch('settings', [AdminSettingController::class, 'update'])->name('settings.update');
     });
 
 require __DIR__.'/auth.php';
 
+/*
+|--------------------------------------------------------------------------
+| Payment gateway (Kashier) callbacks
+|--------------------------------------------------------------------------
+*/
 Route::get('webhooks/kashier', [KashierWebhookController::class, 'returnRedirect'])->name('kashier.return');
 Route::post('webhooks/kashier', [KashierWebhookController::class, 'handle'])->name('kashier.webhook');

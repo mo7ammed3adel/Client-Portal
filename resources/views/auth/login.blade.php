@@ -1,8 +1,8 @@
 <x-guest-layout>
     <div class="mb-8 text-center">
-        <div class="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-lg bg-blue-600 text-sm font-black text-white">CP</div>
-        <h1 class="text-2xl font-black text-slate-950 dark:text-white">بوابة العملاء</h1>
-        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">تابع طلبات التوصيل والمدفوعات وحالة الحساب.</p>
+        <x-brand-mark class="mx-auto mb-4 h-12 w-12" />
+        <h1 class="text-2xl font-black text-slate-950 dark:text-white">لوحة تحكم طلبة</h1>
+        <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">تسجيل دخول فريق الإدارة لإدارة الطلبات والإعدادات.</p>
     </div>
 
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -23,20 +23,15 @@
         </div>
 
         <label for="remember_me" class="inline-flex items-center">
-            <input id="remember_me" type="checkbox" class="rounded border-slate-300 text-blue-600 shadow-sm focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900" name="remember">
+            <input id="remember_me" type="checkbox" class="rounded border-slate-300 text-brand-600 shadow-sm focus:ring-brand-500 dark:border-slate-700 dark:bg-slate-900" name="remember">
             <span class="ms-2 text-sm text-slate-600 dark:text-slate-400">تذكرني</span>
         </label>
 
         <div class="flex items-center justify-between gap-4">
             <div class="flex flex-col gap-2 text-sm font-semibold sm:flex-row sm:items-center sm:gap-4">
                 @if (Route::has('password.request'))
-                    <a class="text-slate-500 hover:text-blue-600 dark:text-slate-400" href="{{ route('password.request') }}">
+                    <a class="text-slate-500 hover:text-brand-600 dark:text-slate-400" href="{{ route('password.request') }}">
                         نسيت كلمة المرور؟
-                    </a>
-                @endif
-                @if (Route::has('register'))
-                    <a class="text-slate-500 hover:text-blue-600 dark:text-slate-400" href="{{ route('register') }}">
-                        إنشاء حساب
                     </a>
                 @endif
             </div>
@@ -46,4 +41,8 @@
             </x-primary-button>
         </div>
     </form>
+
+    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        <a href="{{ route('home') }}" class="font-semibold text-brand-600 hover:underline">العودة إلى موقع طلبة</a>
+    </p>
 </x-guest-layout>

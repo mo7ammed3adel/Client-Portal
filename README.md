@@ -1,20 +1,39 @@
-# Client Portal
+# طلبة — منصة شحن وتوصيل (Talba)
 
-Laravel + MySQL web portal for a freelance marketing consultant and clients.
+موقع توصيل وشحن عام (public delivery & shipping platform) باللغة العربية. أي زائر يقدر ينشئ
+طلب توصيل، يحدد موقع الاستلام والتسليم على الخريطة، يشوف التكلفة محسوبة تلقائيًا حسب المسافة،
+يدفع أونلاين، ويتابع شحنته برقم تتبع — بدون حساب أو عقد مسبق.
 
-## Stack
+## المميزات
+
+- **صفحة رئيسية** تسويقية حديثة بحركات (animations) ورسومات توصيل.
+- **إنشاء طلب عام** باستخدام خريطتين تفاعليتين (استلام/تسليم) مع حساب المسافة والتكلفة لحظيًا.
+- **دفع إلكتروني** عبر Kashier — لا يتم إنشاء الطلب إلا بعد نجاح الدفع، ويُولَّد رقم تتبع فريد.
+- **تتبع الشحنة** برقم التتبع مع مخطط حالة (timeline) بأسلوب Bosta / Aramex.
+- **صفحة من نحن** بمحتوى قابل للتعديل من لوحة التحكم.
+- **صفحة تواصل معنا** بنموذج (الاسم، البريد، الهاتف، الرسالة) يُخزَّن للمراجعة.
+- **لوحة تحكم للإدارة** لإدارة الطلبات، رسائل التواصل، وإعدادات التسعير والمحتوى.
+- **سعر الكيلومتر قابل للتعديل** من لوحة التحكم بدون تعديل الكود (الافتراضي 10 جنيه/كم).
+
+## التقنيات
 
 - Laravel 12
-- Blade + Tailwind CSS + Breeze authentication
-- MySQL / MariaDB
-- Public disk storage for task reference images
+- Blade + Tailwind CSS + Alpine.js
+- Leaflet + OpenStreetMap (الخرائط والبحث الجغرافي)
+- بوابة دفع Kashier (Hosted Checkout + Webhook)
+- MySQL / MariaDB (و SQLite للاختبارات)
 
-## Roles
+## آلية التسعير
 
-- Admin creates client accounts, manages requests, and manages invoices.
-- Client signs in, creates requests, uploads reference images, and views billing.
+```
+التكلفة = الرسوم الأساسية + (المسافة بالكيلومتر × سعر الكيلومتر)
+مثال: 12 كم × 10 جنيه = 120 جنيه
+```
 
-## Local Setup
+المسافة تُحسب على الخادم (Haversine) ولا يُعتمد على القيمة القادمة من المتصفح. سعر الكيلومتر
+والرسوم الأساسية والحد الأدنى للطلب كلها قابلة للتعديل من **لوحة التحكم → الإعدادات**.
+
+## التشغيل المحلي
 
 ```bash
 composer install
@@ -23,13 +42,13 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Create the database:
+أنشئ قاعدة البيانات:
 
 ```sql
-CREATE DATABASE client_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE talba CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-Then run:
+ثم:
 
 ```bash
 php artisan migrate --seed
@@ -38,15 +57,26 @@ npm run build
 php artisan serve
 ```
 
-Demo accounts after seeding:
+## حساب الإدارة بعد التهيئة (seed)
 
-- Admin: `admin@clientportal.test` / `password`
-- Client: `client@clientportal.test` / `password`
+- **مدير:** `admin@talba.eg` / `password`
 
-## Notes
+> سجّل الدخول من `/login` للوصول إلى لوحة التحكم على `/admin`.
 
-- Public self-registration is disabled. Admins create client accounts from the Clients screen.
-- Invoices are manual records; there is no payment gateway integration.
-- Uploaded request images are stored on Laravel's `public` disk under `task-references`.
-- For Vite 7, Node `20.19+` or `22.12+` is recommended.
+## مسارات أساسية
 
+| المسار | الوصف |
+| --- | --- |
+| `/` | الصفحة الرئيسية |
+| `/create-order` | إنشاء طلب توصيل والدفع |
+| `/track?number=...` | تتبع شحنة |
+| `/about` | من نحن |
+| `/contact` | تواصل معنا |
+| `/admin` | لوحة تحكم الإدارة (تتطلب تسجيل دخول) |
+
+## ملاحظات
+
+- التسجيل العام معطّل؛ الدخول مخصص لفريق الإدارة فقط (يُنشأ المدير عبر الـ seeder).
+- بوابة Kashier تُضبط عبر متغيرات `KASHIER_*` في `.env`. عند فشل الدفع لا يُنشأ طلب نهائي.
+- صور/رسومات الموقع كلها SVG داخلية، لا تحتاج ملفات خارجية.
+- للاختبارات تُستخدم قاعدة SQLite في الذاكرة: `php artisan test`.
