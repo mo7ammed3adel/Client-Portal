@@ -25,7 +25,7 @@
         {{-- Top bar --}}
         <header class="sticky top-0 z-40 flex items-center justify-between bg-ink-900 px-4 py-3 text-white">
             <a href="{{ route('courier.dashboard') }}" class="flex items-center gap-2">
-                <x-brand-mark class="h-8 w-8" />
+                <x-brand-logo chip class="h-9 w-auto" />
                 <div class="leading-tight">
                     <p class="text-base font-black">طلبة كابتن</p>
                     <p class="text-[11px] text-slate-300">{{ auth()->user()->name }}</p>

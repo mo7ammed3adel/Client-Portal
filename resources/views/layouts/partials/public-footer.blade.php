@@ -6,7 +6,7 @@
         <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             <div class="lg:col-span-1">
                 <div class="flex items-center gap-2.5">
-                    <x-brand-mark class="h-10 w-10" />
+                    <x-brand-logo chip class="h-12 w-auto" />
                     <span class="text-2xl font-black text-white">مكتب طلبة</span>
                 </div>
                 <p class="mt-4 text-sm leading-7 text-slate-400">

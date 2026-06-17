@@ -15,8 +15,7 @@
      class="sticky top-0 z-50 border-b border-slate-100 backdrop-blur transition-colors duration-300">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-            <x-brand-mark class="h-10 w-10" />
-            <span class="text-2xl font-black tracking-tight text-ink-900">طلبة</span>
+            <x-brand-logo class="h-12 w-auto" />
         </a>
 
         <div class="hidden items-center gap-1 lg:flex">

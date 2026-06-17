@@ -96,8 +96,9 @@
                     </div>
                 </div>
             @else
-                <div class="rounded-3xl border border-dashed border-slate-200 bg-white p-8 text-center text-slate-500">
-                    <p>أدخل رقم التتبع الخاص بشحنتك في الأعلى لعرض حالتها.</p>
+                <div class="rounded-3xl border border-dashed border-slate-200 bg-white p-10 text-center text-slate-500">
+                    <img src="{{ asset('brand/truck.svg') }}" alt="" class="mx-auto h-24 w-24 opacity-90" aria-hidden="true">
+                    <p class="mt-4">أدخل رقم التتبع الخاص بشحنتك في الأعلى لعرض حالتها.</p>
                 </div>
             @endif
         </div>

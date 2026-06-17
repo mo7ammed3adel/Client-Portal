@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-8 text-center">
-        <x-brand-mark class="mx-auto mb-4 h-12 w-12" />
+        <x-brand-logo class="mx-auto mb-4 h-16 w-auto" />
         <h1 class="text-2xl font-black text-slate-950 dark:text-white">لوحة تحكم طلبة</h1>
         <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">تسجيل دخول فريق الإدارة لإدارة الطلبات والإعدادات.</p>
     </div>

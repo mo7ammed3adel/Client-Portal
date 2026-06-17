@@ -3,8 +3,8 @@
         <div class="flex h-16 justify-between">
             <div class="flex items-center gap-8">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5">
-                    <x-brand-mark class="h-9 w-9" />
-                    <span class="font-black text-slate-950 dark:text-white">طلبة <span class="text-xs font-bold text-slate-400">· الإدارة</span></span>
+                    <x-brand-logo class="h-10 w-auto" />
+                    <span class="text-sm font-bold text-slate-400">لوحة الإدارة</span>
                 </a>
 
                 @auth
