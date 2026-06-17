@@ -21,6 +21,7 @@ APP_NAME="Client Portal"
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://your-railway-domain.up.railway.app
+ASSET_URL=https://your-railway-domain.up.railway.app
 APP_KEY=base64:generate-this-with-php-artisan-key-generate
 
 DB_CONNECTION=mysql
