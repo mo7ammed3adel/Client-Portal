@@ -15,6 +15,7 @@ class PortalAccessTest extends TestCase
         $this->get(route('home'))->assertOk();
         $this->get(route('pricing'))->assertOk();
         $this->get(route('about'))->assertOk();
+        $this->get(route('policies'))->assertOk();
         $this->get(route('contact'))->assertOk();
         $this->get(route('order.create'))->assertOk();
         $this->get(route('order.track'))->assertOk();

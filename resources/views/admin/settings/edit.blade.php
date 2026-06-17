@@ -28,16 +28,20 @@
             <div class="portal-card">
                 <div class="border-b border-slate-100 px-5 py-4 dark:border-slate-800">
                     <h2 class="font-bold text-slate-950 dark:text-white">تسعير التوصيل</h2>
-                    <p class="portal-muted mt-1">يتم احتساب التكلفة = الرسوم الأساسية + (المسافة بالكيلومتر × سعر الكيلومتر).</p>
+                    <p class="portal-muted mt-1">التكلفة = الرسوم الأساسية (تغطي أول مسافة محددة) + (الكيلومترات الإضافية × سعر الكيلومتر). مثال: 20ج لأول 2 كم ثم 10ج لكل كم إضافي.</p>
                 </div>
-                <div class="portal-card-body grid gap-5 sm:grid-cols-3">
+                <div class="portal-card-body grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     <div>
-                        <label class="portal-label">سعر الكيلومتر (جنيه)</label>
-                        <input type="number" step="0.01" min="0" name="cost_per_km" value="{{ old('cost_per_km', $settings['cost_per_km']) }}" class="portal-input" required>
+                        <label class="portal-label">الرسوم الأساسية (جنيه)</label>
+                        <input type="number" step="0.01" min="0" name="base_fee" value="{{ old('base_fee', $settings['base_fee']) }}" class="portal-input" required>
                     </div>
                     <div>
-                        <label class="portal-label">رسوم أساسية (جنيه)</label>
-                        <input type="number" step="0.01" min="0" name="base_fee" value="{{ old('base_fee', $settings['base_fee']) }}" class="portal-input" required>
+                        <label class="portal-label">المسافة المشمولة بالرسوم (كم)</label>
+                        <input type="number" step="0.01" min="0" name="base_distance_km" value="{{ old('base_distance_km', $settings['base_distance_km']) }}" class="portal-input" required>
+                    </div>
+                    <div>
+                        <label class="portal-label">سعر الكيلومتر الإضافي (جنيه)</label>
+                        <input type="number" step="0.01" min="0" name="cost_per_km" value="{{ old('cost_per_km', $settings['cost_per_km']) }}" class="portal-input" required>
                     </div>
                     <div>
                         <label class="portal-label">حد أدنى للطلب (جنيه)</label>
@@ -82,7 +86,7 @@
                 </div>
                 <div class="portal-card-body space-y-5">
                     <div>
-                        <label class="portal-label">مقدمة الشركة</label>
+                        <label class="portal-label">مقدمة المكتب</label>
                         <textarea name="about_intro" rows="3" class="portal-input">{{ old('about_intro', $settings['about_intro']) }}</textarea>
                     </div>
                     <div class="grid gap-5 sm:grid-cols-2">

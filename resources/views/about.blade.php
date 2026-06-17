@@ -4,7 +4,7 @@
         <div class="absolute -right-24 -top-20 h-80 w-80 rounded-full bg-brand-500/20 blur-3xl animate-float-slow"></div>
         <div class="section relative text-center">
             <span class="chip mx-auto border-white/15 bg-white/10 text-brand-200">من نحن</span>
-            <h1 class="mt-5 text-4xl font-black sm:text-5xl">تعرّف على طلبة</h1>
+            <h1 class="mt-5 text-4xl font-black sm:text-5xl">تعرّف على مكتب طلبة</h1>
             <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-300">{{ $content['about_intro'] }}</p>
         </div>
     </section>
@@ -49,7 +49,7 @@
     <section class="bg-white py-20">
         <div class="section">
             <div class="reveal mx-auto max-w-2xl text-center">
-                <span class="chip">بيانات الشركة</span>
+                <span class="chip">بيانات المكتب</span>
                 <h2 class="mt-4 text-3xl font-black text-ink-900 sm:text-4xl">معلومات التواصل الرسمية</h2>
             </div>
             <div class="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">

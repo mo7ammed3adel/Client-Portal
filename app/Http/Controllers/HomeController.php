@@ -11,6 +11,8 @@ class HomeController extends Controller
     {
         return view('home', [
             'costPerKm' => Setting::getFloat('cost_per_km'),
+            'baseFee' => Setting::getFloat('base_fee'),
+            'baseDistanceKm' => Setting::getFloat('base_distance_km'),
         ]);
     }
 }

@@ -40,21 +40,28 @@ class PricingService
     /**
      * Build a price quote from a known distance.
      *
-     * @return array{distance_km: float, cost_per_km: float, base_fee: float, total_cost: float}
+     * Pricing model: the base fee covers the first `base_distance_km`
+     * kilometres; every kilometre beyond that costs `cost_per_km`.
+     * Example: 20 EGP for the first 2 km, then 10 EGP per extra km.
+     *
+     * @return array{distance_km: float, cost_per_km: float, base_fee: float, base_distance_km: float, total_cost: float}
      */
     public function quote(float $distanceKm): array
     {
         $costPerKm = Setting::getFloat('cost_per_km');
         $baseFee = Setting::getFloat('base_fee');
+        $baseDistance = Setting::getFloat('base_distance_km');
         $minCost = Setting::getFloat('min_order_cost');
 
-        $total = $baseFee + ($distanceKm * $costPerKm);
+        $extraKm = max(0.0, $distanceKm - $baseDistance);
+        $total = $baseFee + ($extraKm * $costPerKm);
         $total = max($total, $minCost);
 
         return [
             'distance_km' => round($distanceKm, 2),
             'cost_per_km' => round($costPerKm, 2),
             'base_fee' => round($baseFee, 2),
+            'base_distance_km' => round($baseDistance, 2),
             'total_cost' => round($total, 2),
         ];
     }

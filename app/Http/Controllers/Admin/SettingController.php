@@ -22,6 +22,7 @@ class SettingController extends Controller
         $validated = $request->validate([
             'cost_per_km' => ['required', 'numeric', 'min:0', 'max:100000'],
             'base_fee' => ['required', 'numeric', 'min:0', 'max:100000'],
+            'base_distance_km' => ['required', 'numeric', 'min:0', 'max:1000'],
             'min_order_cost' => ['required', 'numeric', 'min:0', 'max:100000'],
             'contact_phone' => ['nullable', 'string', 'max:50'],
             'contact_email' => ['nullable', 'string', 'max:255'],

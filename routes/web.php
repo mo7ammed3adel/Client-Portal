@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 Route::get('/pricing', PricingController::class)->name('pricing');
 Route::get('/about', AboutController::class)->name('about');
+Route::get('/policies', \App\Http\Controllers\PoliciesController::class)->name('policies');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 

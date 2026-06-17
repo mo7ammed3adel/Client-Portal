@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ? $title.' · طلبة' : 'طلبة · شحن وتوصيل سريع وموثوق' }}</title>
-    <meta name="description" content="طلبة منصة شحن وتوصيل عامة في مصر. احسب تكلفة الشحن حسب المسافة على الخريطة، ادفع أونلاين، وأرسل شحنتك في دقائق.">
+    <title>{{ $title ? $title.' · مكتب طلبة' : 'مكتب طلبة · شحن وتوصيل داخل الدقهلية' }}</title>
+    <meta name="description" content="مكتب طلبة للشحن والتوصيل السريع داخل محافظة الدقهلية. احسب تكلفة الشحن حسب المسافة على الخريطة، ادفع أونلاين، وأرسل شحنتك في دقائق.">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=tajawal:400,500,700,800,900&display=swap" rel="stylesheet" />

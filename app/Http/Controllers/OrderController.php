@@ -20,6 +20,7 @@ class OrderController extends Controller
         return view('orders.create', [
             'costPerKm' => Setting::getFloat('cost_per_km'),
             'baseFee' => Setting::getFloat('base_fee'),
+            'baseDistanceKm' => Setting::getFloat('base_distance_km'),
             'minOrderCost' => Setting::getFloat('min_order_cost'),
         ]);
     }
@@ -68,6 +69,7 @@ class OrderController extends Controller
             'distance_km' => $quote['distance_km'],
             'cost_per_km' => $quote['cost_per_km'],
             'base_fee' => $quote['base_fee'],
+            'base_distance_km' => $quote['base_distance_km'],
             'total_cost' => $quote['total_cost'],
             'notes' => $validated['notes'] ?? null,
         ]);

@@ -33,6 +33,7 @@ class PricingServiceTest extends TestCase
     {
         Setting::put('cost_per_km', '10');
         Setting::put('base_fee', '0');
+        Setting::put('base_distance_km', '0');
         Setting::put('min_order_cost', '0');
 
         $service = new PricingService();
@@ -43,10 +44,28 @@ class PricingServiceTest extends TestCase
         $this->assertSame(120.0, $quote['total_cost']);
     }
 
-    public function test_quote_applies_base_fee_and_minimum(): void
+    public function test_quote_uses_base_fee_for_included_distance(): void
+    {
+        // 20 EGP covers the first 2 km, then 10 EGP per extra km.
+        Setting::put('cost_per_km', '10');
+        Setting::put('base_fee', '20');
+        Setting::put('base_distance_km', '2');
+        Setting::put('min_order_cost', '0');
+
+        $service = new PricingService();
+
+        $this->assertSame(20.0, $service->quote(1.0)['total_cost']);   // within first 2 km
+        $this->assertSame(20.0, $service->quote(2.0)['total_cost']);   // exactly 2 km
+        $this->assertSame(50.0, $service->quote(5.0)['total_cost']);   // 20 + 3*10
+        $this->assertSame(120.0, $service->quote(12.0)['total_cost']); // 20 + 10*10
+        $this->assertSame(2.0, $service->quote(12.0)['base_distance_km']);
+    }
+
+    public function test_quote_applies_minimum(): void
     {
         Setting::put('cost_per_km', '10');
         Setting::put('base_fee', '15');
+        Setting::put('base_distance_km', '0');
         Setting::put('min_order_cost', '200');
 
         $service = new PricingService();

@@ -47,6 +47,7 @@ class ContactAndSettingsTest extends TestCase
             ->patch(route('admin.settings.update'), [
                 'cost_per_km' => '15',
                 'base_fee' => '5',
+                'base_distance_km' => '2',
                 'min_order_cost' => '0',
             ])
             ->assertRedirect(route('admin.settings.edit'));

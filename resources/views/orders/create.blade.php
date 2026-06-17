@@ -29,6 +29,7 @@
                   id="order-form"
                   data-cost-per-km="{{ $costPerKm }}"
                   data-base-fee="{{ $baseFee }}"
+                  data-base-distance="{{ $baseDistanceKm }}"
                   data-min-cost="{{ $minOrderCost }}"
                   class="grid gap-8 lg:grid-cols-3">
                 @csrf
@@ -42,7 +43,7 @@
                             <h2 class="text-lg font-black text-ink-900">موقع الاستلام (من)</h2>
                         </div>
                         <div class="mt-4 flex flex-col gap-2 sm:flex-row">
-                            <input type="search" data-map="pickup" data-role="search" class="field mt-0" placeholder="ابحث: مدينة نصر، المهندسين، التجمع...">
+                            <input type="search" data-map="pickup" data-role="search" class="field mt-0" placeholder="ابحث: بلقاس، المنصورة، ميت غمر...">
                             <button type="button" data-map="pickup" data-role="search-btn" class="btn-outline shrink-0 py-2.5">بحث</button>
                             <button type="button" data-map="pickup" data-role="locate" class="btn-outline shrink-0 py-2.5">موقعي</button>
                         </div>
@@ -61,7 +62,7 @@
                             <h2 class="text-lg font-black text-ink-900">موقع التسليم (إلى)</h2>
                         </div>
                         <div class="mt-4 flex flex-col gap-2 sm:flex-row">
-                            <input type="search" data-map="dropoff" data-role="search" class="field mt-0" placeholder="ابحث عن منطقة التسليم...">
+                            <input type="search" data-map="dropoff" data-role="search" class="field mt-0" placeholder="ابحث عن منطقة التسليم داخل الدقهلية...">
                             <button type="button" data-map="dropoff" data-role="search-btn" class="btn-outline shrink-0 py-2.5">بحث</button>
                             <button type="button" data-map="dropoff" data-role="locate" class="btn-outline shrink-0 py-2.5">موقعي</button>
                         </div>
@@ -141,10 +142,8 @@
 
                                 <div class="space-y-2.5 rounded-2xl bg-slate-50 p-4 text-sm">
                                     <div class="flex items-center justify-between"><span class="text-slate-500">المسافة التقديرية</span><span data-summary="distance" class="font-bold text-ink-900">—</span></div>
-                                    <div class="flex items-center justify-between"><span class="text-slate-500">التكلفة لكل كم</span><span data-summary="rate" class="font-bold text-ink-900">{{ rtrim(rtrim(number_format($costPerKm, 2), '0'), '.') }} جنيه</span></div>
-                                    @if ($baseFee > 0)
-                                        <div class="flex items-center justify-between"><span class="text-slate-500">رسوم أساسية</span><span class="font-bold text-ink-900">{{ rtrim(rtrim(number_format($baseFee, 2), '0'), '.') }} جنيه</span></div>
-                                    @endif
+                                    <div class="flex items-center justify-between"><span class="text-slate-500">أول {{ rtrim(rtrim(number_format($baseDistanceKm, 2), '0'), '.') }} كم</span><span class="font-bold text-ink-900">{{ rtrim(rtrim(number_format($baseFee, 2), '0'), '.') }} جنيه</span></div>
+                                    <div class="flex items-center justify-between"><span class="text-slate-500">كل كم إضافي</span><span class="font-bold text-ink-900">{{ rtrim(rtrim(number_format($costPerKm, 2), '0'), '.') }} جنيه</span></div>
                                     <div class="my-1 border-t border-slate-200"></div>
                                     <div class="flex items-center justify-between text-base"><span class="font-black text-brand-700">الإجمالي</span><span data-summary="total" class="text-2xl font-black text-brand-700">—</span></div>
                                 </div>
@@ -181,8 +180,10 @@
             const form = document.getElementById('order-form');
             const costPerKm = parseFloat(form.dataset.costPerKm) || 0;
             const baseFee = parseFloat(form.dataset.baseFee) || 0;
+            const baseDistance = parseFloat(form.dataset.baseDistance) || 0;
             const minCost = parseFloat(form.dataset.minCost) || 0;
-            const CAIRO = [30.0444, 31.2357];
+            // Centre the maps on Belqas, Dakahlia.
+            const CAIRO = [31.2103, 31.3478];
 
             const fmt = (n) => Number(n).toLocaleString('ar-EG', { maximumFractionDigits: 2 });
 
@@ -209,7 +210,8 @@
 
                 if (pSet && dSet) {
                     const dist = haversine(p.point, d.point);
-                    let total = baseFee + dist * costPerKm;
+                    const extra = Math.max(0, dist - baseDistance);
+                    let total = baseFee + extra * costPerKm;
                     if (total < minCost) total = minCost;
                     summary('distance').textContent = fmt(dist) + ' كم';
                     summary('total').textContent = fmt(total) + ' ج';

@@ -16,13 +16,13 @@
 
                 <h1 class="mt-6 animate-fade-up text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
                     اشحن أي حاجة،
-                    <span class="bg-gradient-to-l from-brand-300 to-brand-500 bg-clip-text text-transparent">لأي مكان</span>
-                    في مصر
+                    <span class="bg-gradient-to-l from-brand-300 to-brand-500 bg-clip-text text-transparent">في كل أنحاء</span>
+                    الدقهلية
                 </h1>
 
                 <p class="mx-auto mt-6 max-w-xl animate-fade-up text-lg leading-8 text-slate-300 lg:mx-0" style="animation-delay:.1s">
-                    حدّد موقع الاستلام والتسليم على الخريطة، واحسب التكلفة فورًا حسب المسافة، وادفع أونلاين بأمان.
-                    شحنتك تتحرك في دقائق — بدون عقود ولا اشتراكات.
+                    مكتب طلبة للشحن والتوصيل الداخلي في محافظة الدقهلية. حدّد موقع الاستلام والتسليم على الخريطة،
+                    واحسب التكلفة فورًا حسب المسافة، وادفع أونلاين بأمان — شحنتك تتحرك في دقائق بدون عقود ولا اشتراكات.
                 </p>
 
                 <div class="mt-9 flex animate-fade-up flex-col items-center gap-3 sm:flex-row lg:justify-start" style="animation-delay:.2s">
@@ -38,8 +38,8 @@
 
                 <div class="mt-12 grid grid-cols-3 gap-4 border-t border-white/10 pt-8 text-center lg:text-right">
                     <div><p class="text-3xl font-black text-white" data-count="98">0</p><p class="mt-1 text-xs text-slate-400">% طلبات في الموعد</p></div>
-                    <div><p class="text-3xl font-black text-white" data-count="27">0</p><p class="mt-1 text-xs text-slate-400">محافظة مغطاة</p></div>
-                    <div><p class="text-3xl font-black text-white" data-count="50">0</p><p class="mt-1 text-xs text-slate-400">ألف+ شحنة موصلة</p></div>
+                    <div><p class="text-3xl font-black text-white" data-count="18">0</p><p class="mt-1 text-xs text-slate-400">مركز ومدينة بالدقهلية</p></div>
+                    <div><p class="text-3xl font-black text-white" data-count="20">0</p><p class="mt-1 text-xs text-slate-400">جنيه يبدأ منها التوصيل</p></div>
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
 
         <div class="relative overflow-hidden border-t border-white/10 py-4">
             <div class="flex w-max animate-marquee items-center gap-12 whitespace-nowrap text-sm font-bold text-slate-400">
-                @foreach (['دفع إلكتروني آمن', 'تتبع لحظي للشحنة', 'تسعير شفاف بالكيلومتر', 'استلام من الباب', 'دعم على مدار الساعة', 'تغطية كل المحافظات'] as $item)
+                @foreach (['دفع إلكتروني آمن', 'تتبع لحظي للشحنة', 'تسعير شفاف بالكيلومتر', 'استلام من الباب', 'دعم على مدار الساعة', 'تغطية كل مراكز الدقهلية'] as $item)
                     @for ($i = 0; $i < 2; $i++)
                         <span class="flex items-center gap-12"><span class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-400"></span>{{ $item }}</span></span>
                     @endfor
@@ -151,17 +151,23 @@
             </div>
 
             <div class="reveal">
+                @php
+                    $hBase = rtrim(rtrim(number_format($baseFee, 2), '0'), '.');
+                    $hBaseKm = rtrim(rtrim(number_format($baseDistanceKm, 2), '0'), '.');
+                    $hRate = rtrim(rtrim(number_format($costPerKm, 2), '0'), '.');
+                    $exampleTotal = $baseFee + max(0, 12 - $baseDistanceKm) * $costPerKm;
+                @endphp
                 <div class="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
                     <p class="text-sm font-bold text-brand-300">سعر التوصيل يبدأ من</p>
                     <div class="mt-2 flex items-end gap-2">
-                        <span class="text-6xl font-black">{{ rtrim(rtrim(number_format($costPerKm, 2), '0'), '.') }}</span>
-                        <span class="mb-2 text-xl font-bold text-slate-300">جنيه / كم</span>
+                        <span class="text-6xl font-black">{{ $hBase }}</span>
+                        <span class="mb-2 text-xl font-bold text-slate-300">جنيه لأول {{ $hBaseKm }} كم</span>
                     </div>
                     <div class="mt-6 space-y-3 rounded-2xl bg-ink-800/60 p-5 text-sm">
-                        <div class="flex items-center justify-between text-slate-300"><span>مثال: مسافة 12 كم</span><span class="font-bold text-white">12 كم</span></div>
-                        <div class="flex items-center justify-between text-slate-300"><span>التكلفة لكل كم</span><span class="font-bold text-white">{{ rtrim(rtrim(number_format($costPerKm, 2), '0'), '.') }} جنيه</span></div>
+                        <div class="flex items-center justify-between text-slate-300"><span>أول {{ $hBaseKm }} كم</span><span class="font-bold text-white">{{ $hBase }} جنيه</span></div>
+                        <div class="flex items-center justify-between text-slate-300"><span>كل كم إضافي</span><span class="font-bold text-white">{{ $hRate }} جنيه</span></div>
                         <div class="my-2 border-t border-white/10"></div>
-                        <div class="flex items-center justify-between text-base"><span class="font-bold text-brand-300">الإجمالي</span><span class="text-2xl font-black text-white">{{ number_format(12 * $costPerKm) }} جنيه</span></div>
+                        <div class="flex items-center justify-between text-base"><span class="font-bold text-brand-300">مثال: 12 كم</span><span class="text-2xl font-black text-white">{{ number_format($exampleTotal) }} جنيه</span></div>
                     </div>
                     <a href="{{ route('order.create') }}" class="btn-brand mt-6 w-full justify-center py-3.5 text-base">احسب تكلفتك واطلب الآن</a>
                 </div>

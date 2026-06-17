@@ -1,7 +1,9 @@
 <x-public-layout title="الأسعار">
     @php
         $rate = rtrim(rtrim(number_format($costPerKm, 2), '0'), '.');
-        $examples = [5, 10, 15, 20, 30, 50];
+        $base = rtrim(rtrim(number_format($baseFee, 2), '0'), '.');
+        $baseKm = rtrim(rtrim(number_format($baseDistanceKm, 2), '0'), '.');
+        $examples = [2, 4, 6, 8, 12, 20];
     @endphp
 
     {{-- ===================== HERO ===================== --}}
@@ -21,8 +23,8 @@
                     <span class="text-accent-600">وادفع أقل</span>
                 </h1>
                 <p class="mx-auto mt-5 max-w-xl animate-fade-up text-lg leading-8 text-slate-600 lg:mx-0" style="animation-delay:.1s">
-                    أسعار طلبة محسوبة بالكيلومتر بدقة وبدون رسوم خفية. تعرف التكلفة قبل ما تدفع،
-                    بدون عقود ولا اشتراكات ولا حد أدنى للطلبات.
+                    شحن داخلي سريع في كل مراكز ومدن الدقهلية. السعر يبدأ بـ {{ $base }} جنيه لأول {{ $baseKm }} كم،
+                    ثم {{ $rate }} جنيه لكل كيلومتر إضافي — بدون رسوم خفية ولا عقود.
                 </p>
                 <div class="mt-8 flex animate-fade-up flex-col items-center gap-3 sm:flex-row lg:justify-start" style="animation-delay:.2s">
                     <a href="{{ route('order.create') }}" class="btn-brand px-7 py-3.5 text-base">
@@ -33,7 +35,7 @@
                 </div>
                 <div class="mt-8 flex items-center justify-center gap-2 text-sm font-bold text-brand-700 lg:justify-start">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg>
-                    يبدأ السعر من {{ $rate }} جنيه لكل كيلومتر
+                    {{ $base }} جنيه لأول {{ $baseKm }} كم · شحن داخل الدقهلية فقط
                 </div>
             </div>
 
@@ -79,7 +81,7 @@
             {{-- calculator --}}
             <div id="calculator" class="reveal">
                 <div class="relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-6 shadow-2xl shadow-slate-900/10 sm:p-8"
-                     data-cost-per-km="{{ $costPerKm }}" data-base-fee="{{ $baseFee }}" data-min-cost="{{ $minOrderCost }}" id="calc">
+                     data-cost-per-km="{{ $costPerKm }}" data-base-fee="{{ $baseFee }}" data-base-distance="{{ $baseDistanceKm }}" data-min-cost="{{ $minOrderCost }}" id="calc">
                     <div class="hex absolute -right-8 -top-8 h-28 w-28 bg-brand-50"></div>
                     <div class="relative">
                         <h3 class="text-xl font-black text-ink-900">احسب تكلفة شحنتك</h3>
@@ -96,12 +98,10 @@
                         </div>
 
                         <div class="mt-6 space-y-2.5 rounded-2xl bg-brand-50 p-5 text-sm">
-                            <div class="flex items-center justify-between text-slate-600"><span>التكلفة لكل كم</span><span class="font-bold text-ink-900">{{ $rate }} جنيه</span></div>
-                            @if ($baseFee > 0)
-                                <div class="flex items-center justify-between text-slate-600"><span>رسوم أساسية</span><span class="font-bold text-ink-900">{{ rtrim(rtrim(number_format($baseFee,2),'0'),'.') }} جنيه</span></div>
-                            @endif
+                            <div class="flex items-center justify-between text-slate-600"><span>أول {{ $baseKm }} كم</span><span class="font-bold text-ink-900">{{ $base }} جنيه</span></div>
+                            <div class="flex items-center justify-between text-slate-600"><span>كل كم إضافي</span><span class="font-bold text-ink-900">{{ $rate }} جنيه</span></div>
                             <div class="my-1 border-t border-brand-200"></div>
-                            <div class="flex items-center justify-between"><span class="text-base font-black text-accent-600">الإجمالي التقريبي</span><span class="text-3xl font-black text-accent-600"><span id="calc-total">100</span> ج</span></div>
+                            <div class="flex items-center justify-between"><span class="text-base font-black text-accent-600">الإجمالي التقريبي</span><span class="text-3xl font-black text-accent-600"><span id="calc-total">20</span> ج</span></div>
                         </div>
 
                         <a href="{{ route('order.create') }}" class="btn-brand mt-6 w-full justify-center py-3.5 text-base">اطلب الآن واحسبها بدقة على الخريطة</a>
@@ -125,21 +125,26 @@
                     <thead>
                         <tr class="border-b border-slate-100 bg-ink-900 text-white">
                             <th class="px-4 py-4 text-sm font-black">المسافة</th>
-                            <th class="px-4 py-4 text-sm font-black">سعر الكيلومتر</th>
-                            @if ($baseFee > 0)<th class="px-4 py-4 text-sm font-black">رسوم أساسية</th>@endif
+                            <th class="px-4 py-4 text-sm font-black">طريقة الحساب</th>
                             <th class="px-4 py-4 text-sm font-black">الإجمالي التقريبي</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach ($examples as $km)
-                            @php $total = max($baseFee + $km * $costPerKm, $minOrderCost); $popular = $km === 10; @endphp
+                            @php
+                                $extra = max(0, $km - $baseDistanceKm);
+                                $total = max($baseFee + $extra * $costPerKm, $minOrderCost);
+                                $popular = $km === 6;
+                                $calc = $extra > 0
+                                    ? $base.'ج + '.rtrim(rtrim(number_format($extra,2),'0'),'.').'كم × '.$rate.'ج'
+                                    : $base.'ج (ضمن أول '.$baseKm.' كم)';
+                            @endphp
                             <tr class="{{ $popular ? 'bg-brand-50/70' : '' }}">
                                 <td class="px-4 py-4 font-bold text-ink-900">
                                     {{ $km }} كم
                                     @if ($popular)<span class="ms-2 rounded-full bg-accent-600 px-2 py-0.5 text-[11px] font-bold text-white">الأكثر طلبًا</span>@endif
                                 </td>
-                                <td class="px-4 py-4 text-slate-600">{{ $rate }} ج</td>
-                                @if ($baseFee > 0)<td class="px-4 py-4 text-slate-600">{{ rtrim(rtrim(number_format($baseFee,2),'0'),'.') }} ج</td>@endif
+                                <td class="px-4 py-4 text-xs text-slate-500" dir="rtl">{{ $calc }}</td>
                                 <td class="px-4 py-4 text-lg font-black {{ $popular ? 'text-accent-600' : 'text-brand-700' }}">{{ number_format($total) }} ج</td>
                             </tr>
                         @endforeach
@@ -160,11 +165,11 @@
             <div class="mt-10 space-y-3" x-data="{ open: 1 }">
                 @php
                     $faqs = [
-                        ['q' => 'إزاي بتتحسب تكلفة الشحن؟', 'a' => 'بنحسب المسافة بين نقطة الاستلام ونقطة التسليم على الخريطة، ونضربها في سعر الكيلومتر ('.$rate.' جنيه)، ونضيف الرسوم الأساسية إن وجدت.'],
-                        ['q' => 'هل فيه رسوم خفية أو حد أدنى؟', 'a' => 'لا. التكلفة بتظهر لك كاملة قبل الدفع'.($minOrderCost > 0 ? '، مع حد أدنى للطلب قدره '.rtrim(rtrim(number_format($minOrderCost,2),'0'),'.').' جنيه.' : ' وبدون حد أدنى.')],
+                        ['q' => 'إزاي بتتحسب تكلفة الشحن؟', 'a' => 'التكلفة '.$base.' جنيه لأول '.$baseKm.' كيلومتر، ثم '.$rate.' جنيه عن كل كيلومتر إضافي. بنقيس المسافة بين نقطة الاستلام ونقطة التسليم على الخريطة، والسعر بيظهر لك قبل الدفع.'],
+                        ['q' => 'إيه نطاق الخدمة؟', 'a' => 'مكتب طلبة بيخدم الشحن الداخلي داخل محافظة الدقهلية فقط (بلقاس وكل مراكز ومدن المحافظة). لا نوفّر شحنًا خارج المحافظة أو شحنًا دوليًا.'],
+                        ['q' => 'هل فيه رسوم خفية؟', 'a' => 'لا. التكلفة بتظهر لك كاملة قبل الدفع'.($minOrderCost > 0 ? '، مع حد أدنى للطلب قدره '.rtrim(rtrim(number_format($minOrderCost,2),'0'),'.').' جنيه.' : ' وبدون أي رسوم إضافية.')],
                         ['q' => 'إمتى يتأكد الطلب؟', 'a' => 'الطلب بيتأكد بعد إتمام الدفع الإلكتروني بنجاح فقط، وساعتها بيتولد رقم تتبع فريد لشحنتك.'],
-                        ['q' => 'إزاي أتابع شحنتي؟', 'a' => 'من صفحة "تتبع شحنة" بإدخال رقم التتبع، وهتشوف حالة الشحنة خطوة بخطوة حتى التسليم.'],
-                        ['q' => 'إيه طرق الدفع المتاحة؟', 'a' => 'الدفع الإلكتروني بالبطاقة البنكية أو المحفظة الإلكترونية عبر بوابة دفع آمنة.'],
+                        ['q' => 'إيه طرق الدفع المتاحة؟', 'a' => 'الدفع الإلكتروني بالبطاقة البنكية أو المحفظة الإلكترونية عبر بوابة دفع آمنة بالجنيه المصري.'],
                     ];
                 @endphp
                 @foreach ($faqs as $i => $faq)
@@ -237,6 +242,7 @@
                 if (!calc) return;
                 const perKm = parseFloat(calc.dataset.costPerKm) || 0;
                 const base = parseFloat(calc.dataset.baseFee) || 0;
+                const baseDistance = parseFloat(calc.dataset.baseDistance) || 0;
                 const min = parseFloat(calc.dataset.minCost) || 0;
                 const range = document.getElementById('calc-km');
                 const kmLabel = document.getElementById('calc-km-label');
@@ -244,7 +250,7 @@
                 const fmt = (n) => Number(n).toLocaleString('ar-EG', { maximumFractionDigits: 0 });
                 const update = () => {
                     const km = Number(range.value);
-                    let total = base + km * perKm;
+                    let total = base + Math.max(0, km - baseDistance) * perKm;
                     if (total < min) total = min;
                     kmLabel.textContent = fmt(km);
                     totalEl.textContent = fmt(total);

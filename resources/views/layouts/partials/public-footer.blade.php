@@ -7,17 +7,19 @@
             <div class="lg:col-span-1">
                 <div class="flex items-center gap-2.5">
                     <x-brand-mark class="h-10 w-10" />
-                    <span class="text-2xl font-black text-white">طلبة</span>
+                    <span class="text-2xl font-black text-white">مكتب طلبة</span>
                 </div>
                 <p class="mt-4 text-sm leading-7 text-slate-400">
-                    منصة شحن وتوصيل سريعة وموثوقة. نحسب التكلفة بشفافية حسب المسافة ونوصّل شحنتك بأمان في أسرع وقت.
+                    مكتب طلبة للشحن والتوصيل السريع داخل محافظة الدقهلية. نحسب التكلفة بشفافية حسب المسافة ونوصّل شحنتك بأمان في أسرع وقت.
                 </p>
+                <p class="mt-3 text-xs font-bold text-brand-400">فرعنا الوحيد: بلقاس - الدقهلية</p>
             </div>
 
             <div>
                 <h3 class="text-sm font-black uppercase tracking-wider text-white">روابط سريعة</h3>
                 <ul class="mt-4 space-y-2.5 text-sm">
                     <li><a href="{{ route('home') }}" class="hover:text-brand-400">الرئيسية</a></li>
+                    <li><a href="{{ route('pricing') }}" class="hover:text-brand-400">الأسعار</a></li>
                     <li><a href="{{ route('order.create') }}" class="hover:text-brand-400">إنشاء طلب توصيل</a></li>
                     <li><a href="{{ route('order.track') }}" class="hover:text-brand-400">تتبع شحنة</a></li>
                     <li><a href="{{ route('about') }}" class="hover:text-brand-400">من نحن</a></li>
@@ -44,20 +46,21 @@
             </div>
 
             <div>
-                <h3 class="text-sm font-black uppercase tracking-wider text-white">للأعمال</h3>
-                <p class="mt-4 text-sm leading-7 text-slate-400">
-                    عندك شحنات كثيرة أو متجر إلكتروني؟ تواصل معنا لعروض الشركات والكميات.
-                </p>
-                <a href="{{ route('contact') }}" class="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-500">
-                    اطلب عرض سعر
-                </a>
+                <h3 class="text-sm font-black uppercase tracking-wider text-white">السياسات</h3>
+                <ul class="mt-4 space-y-2.5 text-sm">
+                    <li><a href="{{ route('policies') }}#terms" class="hover:text-brand-400">الشروط والأحكام</a></li>
+                    <li><a href="{{ route('policies') }}#payment" class="hover:text-brand-400">سياسة الدفع</a></li>
+                    <li><a href="{{ route('policies') }}#refund" class="hover:text-brand-400">سياسة الإلغاء والاسترجاع</a></li>
+                    <li><a href="{{ route('policies') }}#privacy" class="hover:text-brand-400">سياسة الخصوصية</a></li>
+                </ul>
             </div>
         </div>
 
         <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row">
-            <p>© {{ date('Y') }} طلبة. جميع الحقوق محفوظة.</p>
+            <p>© {{ date('Y') }} مكتب طلبة — بلقاس، الدقهلية. جميع الحقوق محفوظة.</p>
             <div class="flex items-center gap-4 text-xs">
-                <a href="{{ route('login') }}" class="hover:text-brand-400">دخول الفريق / المناديب</a>
+                <a href="{{ route('policies') }}" class="hover:text-brand-400">السياسات</a>
+                <a href="{{ route('login') }}" class="hover:text-brand-400">دخول الفريق</a>
                 <span>مدفوعات آمنة عبر Kashier</span>
             </div>
         </div>
