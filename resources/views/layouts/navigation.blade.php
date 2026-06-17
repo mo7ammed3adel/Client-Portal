@@ -27,6 +27,9 @@
                                 Billing
                             </x-nav-link>
                         @endif
+                        <x-nav-link :href="route('policies')" :active="request()->routeIs('policies')">
+                            سياسات التعامل
+                        </x-nav-link>
                     </div>
                 @endauth
             </div>
@@ -79,6 +82,7 @@
                     <x-responsive-nav-link :href="route('client.requests.index')" :active="request()->routeIs('client.requests.*')">Orders</x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('client.billing.index')" :active="request()->routeIs('client.billing.*')">Billing</x-responsive-nav-link>
                 @endif
+                <x-responsive-nav-link :href="route('policies')" :active="request()->routeIs('policies')">سياسات التعامل</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('profile.edit')">Profile</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

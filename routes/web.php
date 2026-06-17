@@ -17,6 +17,8 @@ Route::get('/', function () {
         : redirect()->route('login');
 });
 
+Route::view('/policies', 'policies')->name('policies');
+
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
