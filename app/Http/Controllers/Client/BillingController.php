@@ -16,10 +16,11 @@ class BillingController extends Controller
             ->paginate(10);
 
         $allInvoices = $request->user()->invoices()->get();
-        $total = $allInvoices->sum('amount');
-        $paid = $allInvoices->where('status', 'paid')->sum('amount');
-        $remaining = $total - $paid;
+        $total = $allInvoices->where('status', 'paid')->sum('amount');
+        $remaining = $allInvoices
+            ->filter(fn ($invoice) => in_array($invoice->status, ['pending', 'overdue'], true) && $invoice->kashier_merchant_order_id === null)
+            ->sum('amount');
 
-        return view('client.billing.index', compact('invoices', 'total', 'paid', 'remaining'));
+        return view('client.billing.index', compact('invoices', 'total', 'remaining'));
     }
 }

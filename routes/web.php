@@ -35,6 +35,7 @@ Route::middleware(['auth', 'verified', 'role:client'])
             ->only(['index', 'create', 'store', 'show'])
             ->parameters(['requests' => 'task']);
         Route::get('billing', BillingController::class)->name('billing.index');
+        Route::post('billing/pay', [InvoicePaymentController::class, 'store'])->name('billing.pay.new');
         Route::post('billing/{invoice}/pay', InvoicePaymentController::class)->name('billing.pay');
     });
 
