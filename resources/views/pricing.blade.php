@@ -140,12 +140,12 @@
                                     : $base.'ج (ضمن أول '.$baseKm.' كم)';
                             @endphp
                             <tr class="{{ $popular ? 'bg-brand-50/70' : '' }}">
-                                <td class="px-4 py-4 font-bold text-ink-900">
+                                <td class="relative px-4 py-4 text-center font-bold text-ink-900">
                                     {{ $km }} كم
-                                    @if ($popular)<span class="ms-2 rounded-full bg-accent-600 px-2 py-0.5 text-[11px] font-bold text-white">الأكثر طلبًا</span>@endif
+                                    @if ($popular)<span class="absolute top-1/2 -translate-y-1/2 rounded-full bg-accent-600 px-1.5 py-0.5 text-[9px] font-bold leading-none text-white shadow-sm" style="inset-inline-start:0.5rem">الأكثر طلبًا</span>@endif
                                 </td>
-                                <td class="px-4 py-4 text-xs text-slate-500" dir="rtl">{{ $calc }}</td>
-                                <td class="px-4 py-4 text-lg font-black {{ $popular ? 'text-accent-600' : 'text-brand-700' }}">{{ number_format($total) }} ج</td>
+                                <td class="px-4 py-4 text-center text-xs text-slate-500" dir="rtl">{{ $calc }}</td>
+                                <td class="px-4 py-4 text-center text-lg font-black {{ $popular ? 'text-accent-600' : 'text-brand-700' }}">{{ number_format($total) }} ج</td>
                             </tr>
                         @endforeach
                     </tbody>
